@@ -1,7 +1,10 @@
 import * as React from 'react';
-import { StyleSheet, View, TouchableOpacity,ImageBackground } from 'react-native';
+import { StyleSheet, View, TouchableOpacity,ImageBackground, Dimensions } from 'react-native';
 import { Button, Layout, Text } from 'react-native-ui-kitten';
 
+const widthWindow = Dimensions.get('window').width;
+import {toDateIndo} from '../Redux/helper';
+import ProgressiveImage from './ProgressiveImage';
 export default class AricleCard3 extends React.Component {
 
 
@@ -46,6 +49,7 @@ const styles = StyleSheet.create({
     justifyContent:'flex-start',
     alignItems:'flex-start',
     borderBottomColor:'black',
+    width:(widthWindow-32)
   },
   card3Description: {
       width:'90%',
@@ -84,6 +88,7 @@ const styles = StyleSheet.create({
   card3Media: {
       height: 200,
       width:'100%',
+      backgroundColor:'#cccccc',
       borderRadius: 0,
       display:'flex',
       justifyContent:'center',

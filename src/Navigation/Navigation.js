@@ -3,6 +3,15 @@ import PropTypes from 'prop-types';
 import { View, Text, Button, ScrollView, StyleSheet } from "react-native";
 import { createBottomTabNavigator, createStackNavigator, createAppContainer, createDrawerNavigator, NavigationActions } from "react-navigation";
 
+import {
+  List,
+  ListItem,
+} from 'react-native-ui-kitten';
+
+import {
+    CameraIconFill,
+} from '@src/assets/icons';
+
 import HomeScreen from "../Screen/Home";
 import PageScreen from "../Screen/Page";
 import CategoryScreen from "../Screen/Category";
@@ -11,81 +20,108 @@ const styles = StyleSheet.create({
   icon: {
     width: 24,
     height: 24,
-  },    container: {
-        alignItems: 'center',
-    },
-    headerContainer: {
-        height: 150,
-    },
-    headerText: {
-        color: 'red',
-    },
-    screenContainer: {
-        paddingTop: 20,
-        width: '100%',
-    },
-    screenStyle: {
-        height: 30,
-        marginTop: 2,
-        flexDirection: 'row',
-        alignItems: 'center',
-        width: '100%'
-    },
-    screenTextStyle:{
-        fontSize: 20,
-        marginLeft: 20,
-        textAlign: 'center'
-    },
-    selectedTextStyle: {
-        fontWeight: 'bold',
-        color: '#00adff'
-    },
-    activeBackgroundColor: {
-        backgroundColor: 'grey'
-    }
-});
-/*
-const MyDrawerNavigator = createDrawerNavigator({
-  Home: {
-    screen: MyHomeScreen,
   },
-  Notifications: {
-    screen: MyNotificationsScreen,
+  container: {
+    paddingTop:20
   },
+  listItemTitle:{
+    fontSize:18
+  }
 });
-*/
+
 class drawerContentComponents extends Component {
-    navigateToScreen = ( route ) =>(
+    state={
+      menu: [
+        {
+          name:'Beranda',
+          link:'home',
+          img:CameraIconFill,
+          param:{id:'home', title:' Beranda'},
+        },
+        {
+          name:'Artikel',
+          link:'c',
+          param:{id:'artikel', title:' Artikel'},
+          img:CameraIconFill
+        },
+        {
+          name:'Persija',
+          link:'c',
+          param:{id:'persija', title:' Persija'},
+          img:CameraIconFill
+        },
+        {
+          name:'Sepak Bola',
+          link:'c',
+          param:{id:'sepak-bola', title:'Sepak Bola'},
+          img:CameraIconFill
+        },
+        {
+          name:'Arena',
+          link:'/c/arena',
+          link:'c',
+          param:{id:'arena', title:'Arena'},
+          img:CameraIconFill
+        },
+        {
+          name:'Gaya Hidup',
+          link:'/c/gaya-hidup',
+          link:'c',
+          param:{id:'gaya-hidup', title:'Gaya Hidup'},
+          img:CameraIconFill
+        },
+        {
+          name:"Rob's Attack",
+          link:'c',
+          param:{id:'rob-s-attack', title:"Rob's Attack"},
+          img:CameraIconFill
+        },
+        {
+          name:'Galeri',
+          link:'c',
+          param:{id:'galeri', title:'Galeri'},
+          img:CameraIconFill
+        }
+      ]
+    }
+    navigateToScreen = ( route,param ) =>(
         () => {
+        let d =  Math.random () * 10000;
+        // console.warn(d);
         const navigateAction = NavigationActions.navigate({
-            routeName: route
+            routeName: route,
+            params: param,
+            key: d
         });
+        this.props.navigation.closeDrawer();
         this.props.navigation.dispatch(navigateAction);
     })
 
+    renderItem = ({ item })=>{
+      return (
+          <ListItem
+              titleStyle={styles.listItemTitle}
+              title={item.name}
+              onPress={this.navigateToScreen(item.link,item.param)}
+            />
+      );
+    }
     render() {
       return (
           <View style={styles.container}>
-              <View style={styles.headerContainer}>
-                     <Text style={styles.headerText}>Header Portion</Text>
-              </View>
-              <View style={styles.screenContainer}>
-                  <View style={[styles.screenStyle, (this.props.activeItemKey=='Home') ? styles.activeBackgroundColor : null]}>
-                      <Text style={[styles.screenTextStyle, (this.props.activeItemKey=='Home') ? styles.selectedTextStyle : null]} onPress={this.navigateToScreen('Home')}>Screen A</Text>
-                  </View>
-                  <View style={[styles.screenStyle, (this.props.activeItemKey=='cat') ? styles.activeBackgroundColor : null]}>
-                      <Text style={[styles.screenTextStyle, (this.props.activeItemKey=='cat') ? styles.selectedTextStyle : null]} onPress={this.navigateToScreen('cat')}>cat A</Text>
-                  </View>
-              </View>
+              <List
+                data={this.state.menu}
+                renderItem={this.renderItem}
+              />
           </View>
       )
     }
 }
 const DrawerNav = createDrawerNavigator({
-  Home: {
+  home: {
     screen: HomeScreen
   },
-  cat: {
+  c: {
     screen: CategoryScreen
   },
 }, {

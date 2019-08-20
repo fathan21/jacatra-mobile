@@ -2,37 +2,39 @@ import * as React from 'react';
 import { StyleSheet, View, TouchableOpacity,ImageBackground } from 'react-native';
 import { Button, Layout, Text } from 'react-native-ui-kitten';
 
+import ProgressiveImage from './ProgressiveImage';
+import {toDateIndo} from '../Redux/helper';
 export default class AricleCard2 extends React.Component {
 
-
-  onItemPress = (article) => {
-    // this.props.onItemPress(article);
-    // alert(article);
-  };
   render() {
+    const {data} = this.props;
     return (
         <TouchableOpacity
           activeOpacity={0.9}
-          onPress={()=>this.onItemPress('haha')}
+          onPress={()=>this.props.goToPage(data)}
           >
           <Layout style={styles.card2}>
             <Layout style={{width:'30%'}}>
-            <ImageBackground source={{uri:'http://jacatra.net/assets/img/galery/20190706190724_latihan.jpg'}}
-                style={styles.card2Media}>
-
-            </ImageBackground>
+              <ProgressiveImage
+                source={{ uri: data.img }}
+                style={styles.card2Media}
+                resizeMode="cover"
+              />
             </Layout>
             <Layout style={styles.card2Description}>
-              <Text style={styles.card2Title} numberOfLines={2}>Persija Luncurkan Progam Development Center</Text>
+              <Text style={styles.card2Title} numberOfLines={2}>
+                {data.title}
+              </Text>
               <Text style={styles.card2Content}>
-                3 menit yang lalu
+                {toDateIndo(data.date)}
               </Text>
             </Layout>
           </Layout>
         </TouchableOpacity>
     );
   }
-}const styles = StyleSheet.create({
+}
+const styles = StyleSheet.create({
   card2: {
     borderRadius: 0,
     overflow: 'hidden',
@@ -79,6 +81,7 @@ export default class AricleCard2 extends React.Component {
       display:'flex',
       justifyContent:'center',
       alignItems:'center',
+      backgroundColor:'#cccccc'
   },
   text: {
     marginVertical: 16,

@@ -1,32 +1,28 @@
 import * as React from 'react';
-import { StyleSheet, View, TouchableOpacity,ImageBackground } from 'react-native';
+import { StyleSheet, View, TouchableOpacity,ImageBackground, Dimensions } from 'react-native';
 import { Button, Layout, Text } from 'react-native-ui-kitten';
 
+import {toDateIndo} from '../Redux/helper';
+const widthWindow = Dimensions.get('window').width;
+import ProgressiveImage from './ProgressiveImage';
 export default class AricleCard1 extends React.Component {
-
-
-  onItemPress = (article) => {
-    // this.props.onItemPress(article);
-    // alert(article);
-  };
   render() {
+    const {data} = this.props;
     return (
       <Layout style={styles.container}>
-
         <TouchableOpacity
           activeOpacity={0.9}
-          onPress={()=>this.onItemPress('haha')}
+          onPress={()=>this.props.goToPage(data)}
           style={styles.card1}
           >
-          <ImageBackground source={{uri:'http://jacatra.net/assets/img/galery/20190706190724_latihan.jpg'}}
-              style={styles.card1Media}>
-
-          </ImageBackground>
+          <ProgressiveImage source={{uri:data.img}}
+              style={styles.card1Media}
+              resizeMode="cover"
+              />
           <Layout style={styles.card1Description}>
-            <Text style={styles.card1Title} numberOfLines={2}>Persija Luncurkan Progam Development Center</Text>
-            <Text style={styles.card1Content} numberOfLines={2}>Note that this is recommended for English and English-like scripts (Latin, Greek, and Cyrillic). For South and Southeast Asian and Middle Eastern languages, including Arabic, Hindi, and Thai:</Text>
-            <Text style={styles.card1Content}>
-              3 menit yang lalu
+            <Text style={[styles.card1Title, !data.title?styles.fuck:'']} numberOfLines={2}>{data.title}</Text>
+            <Text style={[styles.card1Content,!data.title?styles.fuck:'' ]}>
+              {toDateIndo(data.date)}
             </Text>
           </Layout>
         </TouchableOpacity>
@@ -45,41 +41,34 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     marginTop:0,
     marginBottom:0,
-    display:'flex',
-    justifyContent:'center',
-    alignItems:'center',
-    borderBottomColor:'black',
+    width:widthWindow
   },
   card1Description: {
-      width:'100%',
+      width:widthWindow,
       borderRadius: 0,
       overflow: 'hidden',
-      display:'flex',
-      justifyContent:'flex-start',
-      alignItems:'flex-start',
       paddingLeft:16,
       paddingRight:16,
       paddingBottom:10,
   },
   card1Title: {
-    fontSize:20,
+    fontSize:18,
     fontWeight:'bold',
-    marginTop:16,
+    marginTop:10,
     marginBottom:10,
+    letterSpacing:1,
   },
   card1Content: {
     fontSize:16,
     color:'#808080',
-    marginBottom:5,
+    marginBottom:10,
+  },
+  fuck:{
+    backgroundColor:'#e1e4e8',
   },
   card1Media: {
       height: 250,
-      width:'100%',
-      borderRadius: 0,
-      overflow: 'hidden',
-      display:'flex',
-      justifyContent:'center',
-      alignItems:'center',
+      width:widthWindow,
   },
   text: {
     marginVertical: 16,
