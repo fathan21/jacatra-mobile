@@ -12,7 +12,7 @@ export function toDateIndo(value) {
 	);
 	let difH = differenceInHours(dateLeft, dateRight);
 	if(difH > 24){
-	    return `${format(value,'DD/MM/YYYY HH:mm')}`;
+	    return `${format(value,'MMMM DD, YYYY HH:mm',{locale: idDateFns})}`;
 	}else{
 	    return `${distanceInWordsToNow(dateRight, {locale: idDateFns})} yang lalu`;
 	}
@@ -21,7 +21,7 @@ export function toDate(value) {
 	if(!value){
 		return '';
 	}
-  return `${format(value,'DD/MM/YYYY HH:mm')}`;
+  return `${format(value,'MMMM DD, YYYY HH:mm',{locale: idDateFns})}`;
 }
 
 export function setMetta(meta_temp) {

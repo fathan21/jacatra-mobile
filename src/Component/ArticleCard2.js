@@ -1,17 +1,14 @@
 import * as React from 'react';
-import { StyleSheet, View, TouchableOpacity,ImageBackground } from 'react-native';
-import { Button, Layout, Text } from 'react-native-ui-kitten';
+import { StyleSheet, TouchableOpacity } from 'react-native';
+import { Layout, Text } from 'react-native-ui-kitten';
 
 import ProgressiveImage from './ProgressiveImage';
 import {toDateIndo} from '../Redux/helper';
-export default class AricleCard2 extends React.Component {
-
-  render() {
-    const {data} = this.props;
+export const ArticleCard2 =({data, goToPage}) => {
     return (
         <TouchableOpacity
           activeOpacity={0.9}
-          onPress={()=>this.props.goToPage(data)}
+          onPress={()=>goToPage(data)}
           >
           <Layout style={styles.card2}>
             <Layout style={{width:'30%'}}>
@@ -32,7 +29,6 @@ export default class AricleCard2 extends React.Component {
           </Layout>
         </TouchableOpacity>
     );
-  }
 }
 const styles = StyleSheet.create({
   card2: {

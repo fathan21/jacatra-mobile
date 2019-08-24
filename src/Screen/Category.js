@@ -1,7 +1,6 @@
 import * as React from 'react';
 
 import { connect } from 'react-redux';
-
 import {
     ScrollView,
     View,
@@ -13,9 +12,8 @@ import {
 } from 'react-native-ui-kitten';
 import Toast from 'react-native-easy-toast';
 
-import ArticleCard1 from '../Component/ArticleCard1';
-import ArticleCard2 from '../Component/ArticleCard2';
-import Header from '../Component/Header';
+import {Header, RenderErrorBlog } from '../Component/';
+import {BlogListContainer } from '../Container';
 
 import {fetchBlogs, fetchBlogsCat} from '../Redux/Actions/Blog-actions';
 
@@ -27,7 +25,6 @@ export class CategoryScreen extends React.Component {
         hasMore: true,
         filter:{cat:'',page:1,limit:20,q:''},
         title:'',
-
     }
     toast = null;
   	constructor(props) {
@@ -102,54 +99,39 @@ export class CategoryScreen extends React.Component {
     }) {
         return layoutMeasurement.height + contentOffset.y >= contentSize.height - 50;
     };
+    
     render() {
       const { params } = this.props.navigation.state;
+      
+      if (this.props.blogError.global){
+        return(
+          <View>
+            <Header navigation = {this.props.navigation} title={params.title} />
+            <RenderErrorBlog />
+          </View>
+        );
+      }
       return (
-      <Layout style={{paddingBottom:40}}>
-          <Header navigation = {this.props.navigation} title={params.title} />
-          <ScrollView
-            onScroll ={
-              ({nativeEvent}) => {
-                if (this._isCloseToBottom(nativeEvent) && this.state.hasMore) {
-                    this._loadMore();
-                }
-              }
-            }
-            refreshControl={
-                <RefreshControl
-                  refreshing={this.state.isRefreshing}
-                  onRefresh={this._onRefresh}
-                  tintColor="#000000"
-                  title="Loading..."
-                  titleColor="#000000"
-                  colors={['#000000', '#000000', '#000000']}
-                  progressBackgroundColor="#ffffff"
-                />
-            }
-            >
-            <View>
-              {
-                this.props.blogLoading || this.props.errorsBlog.global?
-                <ArticleCard1 goToPage={()=>{}} data={{}}  /> :
-                  this.props.blogMain.title?
-                  <ArticleCard1 goToPage={()=>{this._goToPage(this.props.blogMain)}} data={this.props.blogMain}  />
-                  :<Text>Data belum tersedia</Text>
-                
-              }
+        <Layout style={{paddingBottom:40}}>
+            <Header navigation = {this.props.navigation} title={params.title} />
+            <BlogListContainer 
+              hasMore={this.state.hasMore}
+              isRefreshing={this.state.isRefreshing}
 
-            </View>
-            <View>
-              {
-                this.props.blogs.map((blog, i) => {
-                  return (<ArticleCard2 goToPage={this._goToPage} key={i}  data={blog}   />);
-                })
-              }
-            </View>
+              loadMore={this._loadMore}
+              onRefresh={this._onRefresh}
+              goToPage={this._goToPage}
+
+              blogLoading={this.props.blogLoading}
+              blogError={this.props.blogError}
+              blogs={this.props.blogs}
+              blogMain={this.props.blogMain}
+            />
             <Toast
-              opacity={0.5}
-              ref={ref => { this.toast = ref; }} />
-          </ScrollView>
-      </Layout>);
+                opacity={0.5}
+                ref={ref => { this.toast = ref; }} />
+        </Layout>
+      );
     }
 }
 
@@ -158,7 +140,7 @@ function mapStateToProps(state, props) {
       blogs:state.BlogStore.blogsByCat[props.navigation.state.params.id]===undefined?[]:state.BlogStore.blogsByCat[props.navigation.state.params.id],
       blogMain:state.BlogStore.blogMainByCat[props.navigation.state.params.id]===undefined?{}:state.BlogStore.blogMainByCat[props.navigation.state.params.id],
       blogCount:state.BlogStore.blogCountByCat[props.navigation.state.params.id]===undefined?0:state.BlogStore.blogCountByCat[props.navigation.state.params.id],
-      errorsBlog: state.BlogStore.errorsBlog,
+      blogError: state.BlogStore.blogError,
       blogLoading: state.BlogStore.blogLoading,
   }
 }

@@ -5,6 +5,7 @@ const baseUrl = App.api;
 // axios.defaults.headers.common['X-CSRF-TOKEN'] = App.csrf;
 
 
+
 export const api = axios.create({
   baseURL: baseUrl,
   headers: {

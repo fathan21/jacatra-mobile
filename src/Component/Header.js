@@ -2,6 +2,7 @@ import * as React from 'react';
 import {
     StyleSheet,
     View,
+    Image,
     TouchableOpacity,
     ImageBackground,
     ScrollView
@@ -14,22 +15,19 @@ import {
 import {
     TopNavigation,
     TopNavigationAction,
-    TopNavigationActionProps,
-    TopNavigationProps,
 } from 'react-native-ui-kitten';
 import {
     SafeAreaView as SafeAreaViewReactNavigation,
-    SafeAreaViewProps,
 } from 'react-navigation';
 import {
-    ArrowIosBackFill,
-    SearchIconOutline,
-    MenuIconDark,
+    SearchIconOutlineWhite,
+    MenuIconWhite,
 } from '@src/assets/icons';
+import theme, {globalStyle} from '../assets/style';
+import {logo} from '../assets/images';
 
 
-
-export default class Header extends React.Component {
+export class Header extends React.Component {
     state = {
 
     }
@@ -44,44 +42,38 @@ export default class Header extends React.Component {
         this.props.navigation.openDrawer();
     };
     renderLeftControl = () => {
-        return ( <TopNavigationAction icon = {
-                MenuIconDark
-            }
-            onPress = {
-                this.openDrawer
-            }
-            />
+        return (
+            <Image
+              style={globalStyle.logo}
+              source={logo.imageSource}
+          />
         );
     }
     renderRightControls = () => {
-        return (<View style = {
-        {
-          display: 'flex',
-          flexDirection: 'row'
-        }
-      } >
-      <TopNavigationAction icon = {
-        SearchIconOutline
-      }
-      onPress = {
-        this.onSearchPress
-      }
-      />
-      <TopNavigationAction icon = {
-        MenuIconDark
-      }
-      onPress = {
-        this.openDrawer
-      }
-      />
-      </View>);
+        return (
+          <View style = {{display: 'flex',flexDirection: 'row'}} >
+            
+            <Button
+              style={globalStyle.btnHeader}
+              size='large'
+              icon={SearchIconOutlineWhite}
+              onPress={this.openDrawer}
+            />
+            <Button
+              style={globalStyle.btnHeader}
+              size='large'
+              icon={MenuIconWhite}
+              onPress={this.openDrawer}
+            />
+          </View>
+      );
     }
     render() {
         return (
               <SafeAreaViewReactNavigation >
                 <TopNavigation alignment = 'start'
-                    title = {this.props.title}
-                    // leftControl={this.renderLeftControl()}
+                    style={{backgroundColor:theme.PRIMARY_COLOR, marginBottom:0, color:theme.PRIMARY_TEXT_COLOR}}
+                    leftControl={this.renderLeftControl()}
                     rightControls = {
                       this.renderRightControls()
                     }

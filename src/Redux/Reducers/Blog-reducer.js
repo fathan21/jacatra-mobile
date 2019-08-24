@@ -18,10 +18,14 @@ export default (state=defaultState, action={}) => {
     // load more
     case 'FETCH_BLOGS_FULFILLED': {
       // console.warn(action.payload.data.main);
+      let blogMain = state.blogMain;
+      if(!blogMain.id) {
+        blogMain = action.payload.data.main;
+      }
       return {
         ...state,
         blogs: state.blogs.concat(action.payload.data.data),
-        blogMain: action.payload.data.main,
+        blogMain: blogMain,
         blogLoading: false,
         blogCount:action.payload.data.count,
         blogError: {}
@@ -31,14 +35,14 @@ export default (state=defaultState, action={}) => {
       return {
         ...state,
         blogLoading: true,
-        errorsBlog: {}
+        blogError: {}
       }
     }
     case 'FETCH_BLOGS_REJECTED': {
       return {
         ...state,
         blogLoading: false,
-        errorsBlog: { global: action.payload.message }
+        blogError: { global: action.payload.message }
       }
     }
     
@@ -61,21 +65,21 @@ export default (state=defaultState, action={}) => {
         blogMainByCat: blogMainByCat,
         blogCountByCat:blogCountByCat,
         blogLoading: false,
-        blogError: {}
+        blogError: {global:''}
       }
     }
     case 'FETCH_BLOGS_CAT_PENDING': {
       return {
         ...state,
         blogLoading: true,
-        errorsBlog: {}
+        blogError: {global: ''}
       }
     }
     case 'FETCH_BLOGS_REJECTED': {
       return {
         ...state,
         blogLoading: false,
-        errorsBlog: { global: action.payload.message }
+        blogError: { global: action.payload.message }
       }
     }
     default:

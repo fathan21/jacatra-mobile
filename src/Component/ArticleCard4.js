@@ -1,18 +1,8 @@
 import * as React from 'react';
-import { StyleSheet, View, TouchableOpacity,ImageBackground, Dimensions } from 'react-native';
-import { Button, Layout, Text } from 'react-native-ui-kitten';
-
-const widthWindow = Dimensions.get('window').width;
-import {toDateIndo} from '../Redux/helper';
+import { StyleSheet, View, TouchableOpacity,} from 'react-native';
+import { Layout, Text } from 'react-native-ui-kitten';
 import ProgressiveImage from './ProgressiveImage';
-export default class AricleCard4 extends React.Component {
-
-
-  onItemPress = (article) => {
-    // this.props.onItemPress(article);
-    // alert(article);
-  };
-  render() {
+export default AricleCard4 =({data, goToPage}) => {
     return (
         <TouchableOpacity
           activeOpacity={0.9}
@@ -27,7 +17,6 @@ export default class AricleCard4 extends React.Component {
           </Layout>
         </TouchableOpacity>
     );
-  }
 }
 
 const styles = StyleSheet.create({

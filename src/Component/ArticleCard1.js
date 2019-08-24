@@ -1,18 +1,16 @@
 import * as React from 'react';
-import { StyleSheet, View, TouchableOpacity,ImageBackground, Dimensions } from 'react-native';
-import { Button, Layout, Text } from 'react-native-ui-kitten';
+import { StyleSheet,  TouchableOpacity, Dimensions } from 'react-native';
+import { Layout, Text } from 'react-native-ui-kitten';
 
 import {toDateIndo} from '../Redux/helper';
 const widthWindow = Dimensions.get('window').width;
 import ProgressiveImage from './ProgressiveImage';
-export default class AricleCard1 extends React.Component {
-  render() {
-    const {data} = this.props;
+export const ArticleCard1 = ({data, goToPage}) => {
     return (
       <Layout style={styles.container}>
         <TouchableOpacity
           activeOpacity={0.9}
-          onPress={()=>this.props.goToPage(data)}
+          onPress={()=>goToPage(data)}
           style={styles.card1}
           >
           <ProgressiveImage source={{uri:data.img}}
@@ -28,7 +26,6 @@ export default class AricleCard1 extends React.Component {
         </TouchableOpacity>
       </Layout>
     );
-  }
 }
 const styles = StyleSheet.create({
   container: {
@@ -67,7 +64,7 @@ const styles = StyleSheet.create({
     backgroundColor:'#e1e4e8',
   },
   card1Media: {
-      height: 250,
+      height: widthWindow / 2,
       width:widthWindow,
   },
   text: {

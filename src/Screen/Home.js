@@ -1,20 +1,16 @@
 import * as React from 'react';
 
 import { connect } from 'react-redux';
-
 import {
-    ScrollView,
     View,
-    RefreshControl,
 } from 'react-native';
 import {
-    Layout,
+    Layout
 } from 'react-native-ui-kitten';
 import Toast from 'react-native-easy-toast';
 
-import ArticleCard1 from '../Component/ArticleCard1';
-import ArticleCard2 from '../Component/ArticleCard2';
-import Header from '../Component/Header';
+import {Header, RenderErrorBlog } from '../Component/';
+import {BlogListContainer } from '../Container';
 
 import {fetchBlogs} from '../Redux/Actions/Blog-actions';
 
@@ -30,6 +26,7 @@ export class HomeScreen extends React.Component {
   		super(props);
 
       this._goToPage = this._goToPage.bind(this);
+      this._getDatas = this._getDatas.bind(this);
   	}
 
     componentDidMount() {
@@ -49,7 +46,7 @@ export class HomeScreen extends React.Component {
     _getDatas = () => {
       this.setState({isRefreshing: true});
     	this.props.fetchBlogs(this.filter).catch(res=>{
-        this._toast(' please cek your connection ');
+        this._toast(res.message);
         this.setState({isRefreshing: false});
     	}).then(res=>{
         this.setState({isRefreshing: false});
@@ -60,7 +57,7 @@ export class HomeScreen extends React.Component {
           filter.page = filter.page +1;
       this.setState({filter:filter, loading:true},()=>{
           this.props.fetchBlogs(filter).catch(res=>{
-            this._toast(' please cek your connection ');
+            this._toast(res.message);
             this.setState({loading:false});
           }).then(res=>{
             this.setState({loading:false});
@@ -76,62 +73,49 @@ export class HomeScreen extends React.Component {
             itemId: item.link,
         })
     }
-
-    _isCloseToBottom({
-        layoutMeasurement,
-        contentOffset,
-        contentSize
-    }) {
-        return layoutMeasurement.height + contentOffset.y >= contentSize.height - 50;
-    };
+    
     render() {
-      // console.warn(this.props.blogMain)
-      return (
-      <Layout style={{paddingBottom:40}}>
-          <Header navigation = {this.props.navigation} title={'Home'} />
-          <ScrollView
-            onScroll ={
-              ({nativeEvent}) => {
-                if (this._isCloseToBottom(nativeEvent) && this.state.hasMore) {
-                    this._loadMore();
-                }
-              }
-            }
-            refreshControl={
-                <RefreshControl
-                  refreshing={this.state.isRefreshing}
-                  onRefresh={this._onRefresh}
-                  tintColor="#000000"
-                  title="Loading..."
-                  titleColor="#000000"
-                  colors={['#000000', '#000000', '#000000']}
-                  progressBackgroundColor="#ffffff"
-                />
-            }
-            >
-            <View>
-              <ArticleCard1 goToPage={this._goToPage} data={this.props.blogMain}  />
-            </View>
-            <View>
-              {
-                this.props.blogs.map((blog, i) => {
-                  return (<ArticleCard2 goToPage={this._goToPage} key={i}  data={blog}   />);
-                })
-              }
-            </View>
+      if (this.props.blogError.global){
+        return(
+          <View>
+            <Header navigation = {this.props.navigation} title={'Home'} />
+            <RenderErrorBlog getDatas={this._getDatas} />
             <Toast
               opacity={0.5}
               ref={ref => { this.toast = ref; }} />
-          </ScrollView>
-      </Layout>);
+          </View>
+        );
+      }
+      return (
+        <Layout style={{paddingBottom:40}}>
+            <Header navigation = {this.props.navigation} title={'Home'} />
+            <BlogListContainer 
+              hasMore={this.state.hasMore}
+              isRefreshing={this.state.isRefreshing}
+
+              loadMore={this._loadMore}
+              onRefresh={this._onRefresh}
+              goToPage={this._goToPage}
+              
+              blogLoading={this.props.blogLoading}
+              blogError={this.props.blogError}
+              blogs={this.props.blogs}
+              blogMain={this.props.blogMain}
+            />
+            <Toast
+                opacity={0.5}
+                ref={ref => { this.toast = ref; }} />
+        </Layout>
+      );
     }
 }
 
-function mapStateToProps(state, props) {
+function mapStateToProps(state) {
   return {
       blogs:state.BlogStore.blogs,
       blogMain: state.BlogStore.blogMain,
-      blogLoading: state.BlogStore.blogLoading
+      blogLoading: state.BlogStore.blogLoading,
+      blogError: state.BlogStore.blogError
   }
 }
 export default connect(mapStateToProps, {fetchBlogs})(HomeScreen);
