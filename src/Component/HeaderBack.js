@@ -2,19 +2,13 @@ import * as React from 'react';
 import {
     StyleSheet,
     View,
-    Image,
-    TouchableOpacity,
-    ImageBackground,
-    ScrollView
+    Image, AsyncStorage
 } from 'react-native';
 import {
     Button,
-    Layout,
-    Text
 } from 'react-native-ui-kitten';
 import {
     TopNavigation,
-    TopNavigationAction,
 } from 'react-native-ui-kitten';
 import {
     SafeAreaView as SafeAreaViewReactNavigation,
@@ -28,17 +22,31 @@ import theme, {globalStyle} from '../assets/style';
 import {logo} from '../assets/images';
 import { ShareOutlineWhite } from '../assets/icons';
 
+const BoomarkList = async ()=>{
+  let d = AsyncStorage.getItem('bookmark');
+  if(!d){
+    d = [];
+  };
+  return d;
+}
+
+const IsBoomark = (id)=>{
+  BoomarkList().then((dt)=>{
+    
+    let isB = dt.filter(n=>{
+      return n.id = id;
+    })
+    return isB;
+  })
+}
 
 export class HeaderBack extends React.Component {
     state = {
-
     }
     componentWillMount() {
-
     };
 
     onSearchPress = () => {
-
     };
     openDrawer = () => {
         this.props.navigation.openDrawer();
@@ -88,6 +96,9 @@ export class HeaderBack extends React.Component {
       );
     }
     render() {
+      const {data} = this.props;
+     // let isB = data.id? IsBoomark(data.id):null;
+      // console.warn(isB);    
         return (
               <SafeAreaViewReactNavigation >
                 <TopNavigation alignment = 'start'

@@ -1,4 +1,4 @@
-package com.mynewapp;
+package com.jacatranet;
 
 import android.app.Application;
 

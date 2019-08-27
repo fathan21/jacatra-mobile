@@ -1,7 +1,9 @@
 import React, {Component} from "react";
 import PropTypes from 'prop-types';
 import { View, Text, Button, ScrollView, StyleSheet } from "react-native";
-import { createBottomTabNavigator, createStackNavigator, createAppContainer, createDrawerNavigator, NavigationActions } from "react-navigation";
+import { 
+    createMaterialTopTabNavigator, createSwitchNavigator,
+    createBottomTabNavigator, createStackNavigator, createAppContainer, createDrawerNavigator, NavigationActions } from "react-navigation";
 
 import {
   List,
@@ -13,8 +15,10 @@ import {
 } from '@src/assets/icons';
 
 import HomeScreen from "../Screen/Home";
+import SplashScreen from "../Screen/SplashScreen";
 import PageScreen from "../Screen/Page";
 import CategoryScreen from "../Screen/Category";
+import SearchScreen from "../Screen/Search";
 
 const styles = StyleSheet.create({
   icon: {
@@ -117,16 +121,6 @@ class drawerContentComponents extends Component {
       )
     }
 }
-const DrawerNav = createDrawerNavigator({
-  home: {
-    screen: HomeScreen
-  },
-  c: {
-    screen: CategoryScreen
-  },
-}, {
-  contentComponent: drawerContentComponents
-});
 /*
 const AppNavigator = createStackNavigator(
   {
@@ -138,18 +132,36 @@ const AppNavigator = createStackNavigator(
     initialRouteName: "Home"
   }
 );*/
-const TabNavigator = createBottomTabNavigator({
+
+const TabNavigator = createMaterialTopTabNavigator({
   Home: HomeScreen,
-  Page: PageScreen,
+  c: HomeScreen,
+});
+const DrawerNav = createDrawerNavigator({
+  home: {
+    screen: HomeScreen
+  },
+  c: {
+    screen: CategoryScreen
+  },
+}, {
+  contentComponent: drawerContentComponents
 });
 const AppNavigator = createStackNavigator({
   DrawerNav: DrawerNav,
   Page: PageScreen,
+  Search: SearchScreen
 },{
   headerMode: "none"
 });
+const InitialNavigator = createSwitchNavigator({
+  Splash: SplashScreen,
+  App: AppNavigator
+});
+
+export default createAppContainer(InitialNavigator);
 //const AppContainer = createAppContainer(TabNavigator);
 
 // const AppContainer = createAppContainer(DrawerNav);
-const AppContainer = createAppContainer(AppNavigator);
-export default AppContainer;
+// const AppContainer = createAppContainer(AppNavigator);
+// export default AppContainer;

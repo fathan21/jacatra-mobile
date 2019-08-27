@@ -3,19 +3,20 @@ import { StyleSheet, TouchableOpacity,ImageBackground, Dimensions } from 'react-
 import { Layout, Text } from 'react-native-ui-kitten';
 
 const widthWindow = Dimensions.get('window').width;
-export default AricleCard3 = ({data, goToPage})=> {
+export const ArticleCard3 = ({data, goToPage, i})=> {
   
     return (
         <TouchableOpacity
+          key={i}
           activeOpacity={0.9}
-          onPress={()=>goToPage('haha')}
+          onPress={()=>goToPage(data)}
           >
           <Layout style={styles.card3}>
-            <ImageBackground source={{uri:'http://jacatra.net/assets/img/galery/20190706190724_latihan.jpg'}}
+            <ImageBackground source={{uri:data.img}}
                 style={styles.card3Media}>
 
                 <Layout style={styles.card3Description}>
-                  <Text style={styles.card3Title} numberOfLines={2}>Persija Luncurkan Progam Development Center</Text>
+                  <Text style={styles.card3Title} numberOfLines={2}>{data.title}</Text>
                 </Layout>
             </ImageBackground>
           </Layout>

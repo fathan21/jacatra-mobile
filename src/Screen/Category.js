@@ -39,7 +39,11 @@ export class CategoryScreen extends React.Component {
       const { params } = this.props.navigation.state;
       const filter = this.state.filter;
             filter.cat = params.id;
-      this.setState({filter:filter},this.props.fetchBlogsCat(filter));
+      this.setState({filter:filter},()=>{
+        if(this.props.blogs.length <=0) {
+          this.props.fetchBlogsCat(filter);
+        }
+      });
     };
     componentWillReceiveProps(nextProps) {
       const { params } = nextProps.navigation.state;
@@ -123,6 +127,7 @@ export class CategoryScreen extends React.Component {
               goToPage={this._goToPage}
 
               blogLoading={this.props.blogLoading}
+              hideHeader={(d)=>{}}
               blogError={this.props.blogError}
               blogs={this.props.blogs}
               blogMain={this.props.blogMain}

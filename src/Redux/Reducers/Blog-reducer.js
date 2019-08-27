@@ -10,12 +10,66 @@ const defaultState = {
   blogsByCat:{},
   blogMainByCat:{},
   blogCountByCat:{},
+
+  headline:[],
+  headlineError:{},
+  headlineLoading:false,
+
+  populer:[],
+  populerError:{},
+  populerLoading:false
 }
 
 export default (state=defaultState, action={}) => {
   // console.warn(action);
   switch (action.type) {
-    // load more
+    
+    case 'FETCH_POPULER_FULFILLED': {
+      return {
+        ...state,
+        populer: state.populer.concat(action.payload.data.data.populer),
+        populerLoading: false,
+        populerError: {}
+      }
+    }
+    case 'FETCH_POPULER_PENDING': {
+      return {
+        ...state,
+        populerLoading: true,
+        populerError: {}
+      }
+    }
+    case 'FETCH_POPULER_REJECTED': {
+      return {
+        ...state,
+        populerLoading: false,
+        populerError: { global: action.payload.message }
+      }
+    }
+
+    case 'FETCH_HEADLINE_FULFILLED': {
+      return {
+        ...state,
+        headline: state.headline.concat(action.payload.data.data),
+        headlineLoading: false,
+        headlineError: {}
+      }
+    }
+    case 'FETCH_HEADLINE_PENDING': {
+      return {
+        ...state,
+        headlineLoading: true,
+        headlineError: {}
+      }
+    }
+    case 'FETCH_HEADLINE_REJECTED': {
+      return {
+        ...state,
+        headlineLoading: false,
+        headlineError: { global: action.payload.message }
+      }
+    }
+
     case 'FETCH_BLOGS_FULFILLED': {
       // console.warn(action.payload.data.main);
       let blogMain = state.blogMain;

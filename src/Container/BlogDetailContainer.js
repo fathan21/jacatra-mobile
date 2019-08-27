@@ -91,13 +91,13 @@ export  class BlogDetailContainer extends React.Component {
     )
   }
   render() {
-    const IMAGES_MAX_WIDTH = Dimensions.get('window').width - 20;
+    const IMAGES_MAX_WIDTH = Dimensions.get('window').width;
     const CUSTOM_STYLES = {};
     const CUSTOM_RENDERERS = {};
     const DEFAULT_PROPS = {
         htmlStyles: CUSTOM_STYLES,
         renderers: CUSTOM_RENDERERS,
-        imagesMaxWidth: IMAGES_MAX_WIDTH,
+        imagesMaxWidth: IMAGES_MAX_WIDTH  - 20,
         onLinkPress: (evt, href) => { Linking.openURL(href); },
         debug: true
     };
@@ -114,27 +114,39 @@ export  class BlogDetailContainer extends React.Component {
     if(data.content){
       content = this._replaceAll(data.content,"<p><br></p>",'');
     }
+
+    let images = [];
     if(data.type == 'article'){
       media.push(this._renderImage(data,0));
+      images = [
+        {
+            source: {
+                uri:data.img,
+            },
+            title: data.title,
+            width: IMAGES_MAX_WIDTH,
+            height: IMAGES_MAX_WIDTH / 2,
+        },
+      ];
     }
     if(data.type == 'galery'){
       media.push(this._renderImages(data));
+      data.imgs.forEach(element => {
+          images.push({
+            source: {
+                uri:element.img,
+            },
+            title: element.name,
+            width: IMAGES_MAX_WIDTH,
+            height: IMAGES_MAX_WIDTH / 2,
+          })
+      });
     }
     if(data.type == 'video'){
       media.push(this._renderVideo(data));
     }
 
 
-    const images = [
-      {
-          source: {
-              uri:data.img,
-          },
-          title: data.title,
-          width: 806,
-          height: 720,
-      },
-    ];
 
     return (
       <Layout style={{paddingBottom:50}}>
@@ -189,7 +201,7 @@ export  class BlogDetailContainer extends React.Component {
               imageIndex={this.state.imageIndex}
               animationType="fade"
               isVisible={this.state.isImageViewVisible}
-              renderFooter={(currentImage) => (<View><Text>My footer</Text></View>)}
+              renderFooter={(currentImage) => (<View style={{width:100,height:100}}><Text>My footer</Text></View>)}
               onClose={() => this.setState({isImageViewVisible: false})}
               onImageChange={index => {
                   console.log(index);

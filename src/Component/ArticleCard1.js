@@ -30,6 +30,7 @@ export const ArticleCard1 = ({data, goToPage}) => {
 const styles = StyleSheet.create({
   container: {
       backgroundColor:'#ffffff',
+      marginBottom:5
   },
   card1: {
     borderBottomWidth: 1,

@@ -14,7 +14,7 @@ import {
 
 import theme  from '../assets/style';
 
-import {ArticleCard1, ArticleCard2, } from '../Component/';
+import {ArticleCard1, ArticleCard2, ArticleCard3 } from '../Component/';
 
 export class BlogListContainer extends React.Component {
     scroll = null;
@@ -22,6 +22,7 @@ export class BlogListContainer extends React.Component {
       super(props);
       this.state = {
         showBtnToTop: false,
+        offset: 0
       }
   	}
 
@@ -51,6 +52,8 @@ export class BlogListContainer extends React.Component {
         blogError,
         blogs,
         blogMain,
+        type_card,
+        hideHeader
       } = this.props;
       return (
         <View>
@@ -58,7 +61,16 @@ export class BlogListContainer extends React.Component {
             ref={(c) => {this.scroll = c}}
             onScroll ={
               ({nativeEvent}) => {
-                if(nativeEvent.contentOffset.y > 270) {
+                
+                
+                  var currentOffset = nativeEvent.contentOffset.y;
+                  var direction = currentOffset > this.state.offset && currentOffset > 100 ? true : false;
+                  this.setState({
+                    offset : currentOffset
+                  });
+                  // console.warn(direction);
+                  // hideHeader(direction);
+                if(nativeEvent.contentOffset.y > 200) {
                   if(!this.state.showBtnToTop) {
                     this.setState({showBtnToTop:true})
                   }
@@ -90,13 +102,21 @@ export class BlogListContainer extends React.Component {
                   <ArticleCard1 goToPage={()=>{}} data={{}}  /> :
                     blogMain.title?
                     <ArticleCard1 goToPage={()=>{goToPage(blogMain)}} data={blogMain}  />
-                    :<Text style={{fontSize:18, textAlign:'center', paddingTop:50}}>Data belum tersedia</Text>
+                    : 
+                    blogs.length <= 0?<Text style={{fontSize:18, textAlign:'center', paddingTop:50}}>Data belum tersedia</Text>:null
               }
             </View>
-            <View>
+            <View style={{paddingBottom:150}}>
               {
                   blogs.map((blog, i) => {
-                  return (<ArticleCard2 goToPage={goToPage} key={i}  data={blog}   />);
+                  return (
+                    type_card == '1'? 
+                      <ArticleCard1 goToPage={goToPage} key={i}  data={blog}   />: 
+                      type_card == '3'? 
+                      <ArticleCard3 goToPage={goToPage} key={i}  data={blog}   /> :
+                      <ArticleCard2 goToPage={goToPage} key={i}  data={blog}   /> 
+                    
+                  );
                 })
               }
             </View>
@@ -105,7 +125,7 @@ export class BlogListContainer extends React.Component {
             this.state.showBtnToTop?
             <Button
               style={{
-                  position: 'absolute',right:20, bottom: 100, width:40,height:40, 
+                  position: 'absolute',right:20, bottom: 200, width:40,height:40, 
                   backgroundColor:theme.PRIMARY_COLOR, 
                   color:theme.PRIMARY_TEXT_COLOR,
                   display:'flex', alignItems:'center',justifyContent:'center', borderWidth:0

@@ -31,3 +31,25 @@ export function fetchBlogsCat(filter={cat:'',page:1,limit:20,q:''}){
       });
   }
 }
+
+export function fetchHeadline(){
+  let url_a = 'headline';
+  // console.warn(params);
+  return dispatch => {
+    return dispatch({
+      type: 'FETCH_HEADLINE',
+      payload: api.post(`${url_a}`, {})
+    })
+  }
+}
+
+export function fetchPopuler(){
+  let url_a = 'sidebar';
+// console.warn(params);
+return dispatch => {
+  return dispatch({
+    type: 'FETCH_POPULER',
+    payload: api.post(`${url_a}`, {})
+  })
+}
+}

@@ -3,18 +3,12 @@ import {
     StyleSheet,
     View,
     Image,
-    TouchableOpacity,
-    ImageBackground,
-    ScrollView
 } from 'react-native';
 import {
     Button,
-    Layout,
-    Text
 } from 'react-native-ui-kitten';
 import {
     TopNavigation,
-    TopNavigationAction,
 } from 'react-native-ui-kitten';
 import {
     SafeAreaView as SafeAreaViewReactNavigation,
@@ -57,7 +51,7 @@ export class Header extends React.Component {
               style={globalStyle.btnHeader}
               size='large'
               icon={SearchIconOutlineWhite}
-              onPress={this.openDrawer}
+              onPress={()=>this.props.navigation.push('Search')}
             />
             <Button
               style={globalStyle.btnHeader}

@@ -22,3 +22,7 @@ export const imageSignIn3Bg: ImageSource = {
 export const imageSignIn4Bg: ImageSource = {
   imageSource: require('./source/image-background-auth-4.jpg'),
 };
+export const splashBg: ImageSource = {
+  imageSource: require('./source/splash.png'),
+};
+

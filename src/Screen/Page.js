@@ -9,6 +9,9 @@ import {App} from '../Redux/const';
 import {RenderLoadingBlogDetail, RenderErrorBlog, HeaderBack } from '../Component/';
 import {BlogDetailContainer} from '../Container';
 export default class PageScreen extends React.Component {
+  static navigationOptions = {
+      header: null
+  };
   state = {
     isRefreshing: false,
     loading: false,
@@ -95,6 +98,7 @@ export default class PageScreen extends React.Component {
   }
   
   _shareText() {
+    
     const {data} = this.state;
     // console.warn(data);
     if(!data.title){
@@ -146,10 +150,14 @@ export default class PageScreen extends React.Component {
   };
   
   render() {
+    
+    const { navigation } = this.props;
+    const itemId = navigation.getParam('itemId', 'NO-ID');
+
     if (this.state.loading) {
       return(
         <View>
-          <HeaderBack navigation = {this.props.navigation} title={'title'} share={this._shareText} />
+          <HeaderBack navigation = {this.props.navigation} title={'title'} share={this._shareText} data={this.state.data} />
           <RenderLoadingBlogDetail />
         </View>
       );
@@ -158,14 +166,14 @@ export default class PageScreen extends React.Component {
       return(
         <View>
           <HeaderBack navigation = {this.props.navigation} title={'title'} />
-          <RenderErrorBlog />
+          <RenderErrorBlog getDatas={()=>this._getData(itemId)} />
         </View>
       );
     }
 
     return (
       <Layout style={{paddingBottom:50}}>
-        <HeaderBack navigation = {this.props.navigation} title={'title'} share={this._shareText} />
+        <HeaderBack navigation = {this.props.navigation} title={'title'} share={this._shareText} data={this.state.data} />
         <BlogDetailContainer
           data={this.state.data}
           isRefreshing={this.state.isRefreshing}

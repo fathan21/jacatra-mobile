@@ -1,9 +1,11 @@
 import * as React from 'react';
-import { StyleSheet, TouchableOpacity } from 'react-native';
+import { StyleSheet, TouchableOpacity, Dimensions } from 'react-native';
 import { Layout, Text } from 'react-native-ui-kitten';
 
 import ProgressiveImage from './ProgressiveImage';
 import {toDateIndo} from '../Redux/helper';
+
+const widthWindow = Dimensions.get('window').width;
 export const ArticleCard2 =({data, goToPage}) => {
     return (
         <TouchableOpacity
@@ -11,7 +13,7 @@ export const ArticleCard2 =({data, goToPage}) => {
           onPress={()=>goToPage(data)}
           >
           <Layout style={styles.card2}>
-            <Layout style={{width:'30%'}}>
+            <Layout style={{width:100}}>
               <ProgressiveImage
                 source={{ uri: data.img }}
                 style={styles.card2Media}
@@ -48,7 +50,7 @@ const styles = StyleSheet.create({
     borderColor: '#cccccc',
   },
   card2Description: {
-      width:'70%',
+      width:widthWindow - 130,
       height:100,
       borderRadius: 0,
       overflow: 'hidden',
@@ -72,6 +74,7 @@ const styles = StyleSheet.create({
   },
   card2Media: {
       height: 100,
+      width: 100,
       borderRadius: 0,
       overflow: 'hidden',
       display:'flex',
