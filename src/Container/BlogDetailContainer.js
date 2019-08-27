@@ -11,7 +11,7 @@ import SwiperFlatList from 'react-native-swiper-flatlist';
 import { WebView } from "react-native-webview";
 
 import {RenderKeywordBlog, RenderRelatedBlog, } from '../Component/';
-
+const widthWindow = Dimensions.get('window').width;
 export  class BlogDetailContainer extends React.Component {
   state = {
     isImageViewVisible: false,
@@ -80,9 +80,9 @@ export  class BlogDetailContainer extends React.Component {
   }
   _renderVideo = (data) =>{
     return (
-      <View style={{width:'100%', height:250}} key={0}>
+      <View style={{width:widthWindow, height:(widthWindow/2), backgroundColor:'#cccccc', marginBottom:20}} key={0}>
          <WebView
-            style={ {margin : 20 }}
+            style={ {margin :0 }}
             source={{ uri: data.video }}
             javaScriptEnabled={true}
             domStorageEnabled={true}   
