@@ -1,5 +1,7 @@
 import {parse, differenceInHours, format, distanceInWordsToNow} from 'date-fns';
+import AsyncStorage from '@react-native-community/async-storage';
 const idDateFns = require('date-fns/locale/id')
+
 export function toDateIndo(value) {
 	if(!value){
 		return '';
@@ -107,46 +109,9 @@ export function getToken() {
   return false;
 }
 
-export function getProfile() {
-  let auth = window.localStorage.getItem(config.core.user_local_);
-  if(auth){
-    auth = JSON.parse(auth);
-    return auth;
-  }
-  return false;
-}
-
-export function getHomeModule(){
-  return api.get(config.core.base_url+'setting');
-}
 export const capitalize = (s) => {
   if (typeof s !== 'string') return ''
   return s.charAt(0).toUpperCase() + s.slice(1)
-}
-export function checkToken(){
-  let url = baseUrl+'checkToken';
-  let config = {headers: {
-      "Content-Type": "application/json",
-      "token":getToken()
-  }};
-  return axios.get(url,config)
-  .then(function (response) {
-    // handle success
-    if(response.data.status !=='ok'){
-      window.localStorage.removeItem(config.core.user_local_);
-      return {status:'invalid token'};
-    }else{
-      return {status:'ok'};
-    }
-  })
-  .catch(function (error) {
-    // handle error
-      return {status:'ok'};
-  })
-  .then(function (r) {
-    return r;
-    //return {status:'ok'};
-  });
 }
 export const Rupiah=(angka)=> {
   if(!angka){
@@ -159,131 +124,75 @@ export const Rupiah=(angka)=> {
 }
 //genearet appid
 
-export function getAppSetting() {
-
-  let app_name = config.core.app_name;
-  // console.log(app_name,'appname');
-  let auth = window.localStorage.getItem(app_name);
-  if(auth){
-    auth = JSON.parse(auth);
-    return auth.s;
-  }
-  return false;
-
-
-}
-export function getSignature() {
-  let app_name = config.core.app_name;
-  let auth = window.localStorage.getItem(app_name);
-
-  if(auth){
-    auth = JSON.parse(auth);
-    return auth.app_id;
-  }
-  return false;
-}
-export function generateAppID(){
-  let appID = config.core.app_id;
-  var currentDate = new Date();
-  var day = currentDate.getDate();
-  var month = currentDate.getMonth() + 1;
-  var year = currentDate.getFullYear();
-  var rand = Math.floor(Math.random() * 100);
-  var secret = year+''+month+''+day+''+rand;
-      secret = new Buffer(secret).toString('base64');
-  //console.log('ese',secret);
-  let app_name = config.core.app_name;
-
-  let status = statusHtmlStorage(app_name);
-
-  if(status === 0){
-    // genereate new token and flash Data
-    let data =  new Buffer(appID+'.'+secret).toString('base64');
-    let headers={};
-    headers['Access-Control-Allow-Origin'] = "*";
-    headers['Signature'] = data;
-    headers['Content-Type'] = "application/json";
-		return new Promise((resolve, reject)  => {
-      fetch(config.core.base_url+'setting', {
-        cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-        credentials: 'same-origin', // include, *omit
-        headers: headers,
-        method: 'GET', // *,POST,GET, PUT, DELETE, etc.
-        mode: 'cors', // no-cors, *same-origin
-        redirect: 'follow', // *manual, error
-        referrer: 'no-referrer', // *client
-      })
-      .then(response =>{
-        //console.log('signature',data);
-        if(response.ok){
-          let res = response.clone();
-          res.json().then((r) => {
-            setHtmlStorage(app_name,{'app_id':data,'s':r.data},1);
-            resolve(response.json());
-          });
-
-        }else{
-          resolve({'status':'error','msg':response.statusText});
+export const _isBookmark = async (id) => {
+  try {
+    return AsyncStorage.getItem('_bookmark').then((e)=>{
+        if(e === null) {
+          return false;
         }
-      })
-      .catch(e=>{
-          resolve({'status':'error','msg':e});
-      });
-		});
-  }else{
-			return new Promise(resolve => {
-        resolve({'status':'ok','msg':'success'});
-			});
+        let dk = JSON.parse(e);
+        let n = dk.filter(person => person.id === id);
+        if(n.length > 0) {
+          return true;
+        } else {
+          return false;
+        }
+    })
+  } catch (error) {
+    return false;
   }
-  //let data = base64urlEncode( header ) + “.” + base64urlEncode( payload );
-  //let hashedData = hash( data, secret );
-  //let signature = base64urlEncode( hashedData );
-}
+};
 
-export function logoutData(){
-  localStorage.removeItem(config.core.user_local_);
-  // localStorage.removeItem(config.core.cart_local_);
-}
-export function getCart(){
-  let d = statusHtmlStorage(config.core.cart_local_);
-  if(!d){
-    return [];
+export const _saveBookmark = async (item) => {
+  try {
+
+    return AsyncStorage.getItem('_bookmark').then((e)=>{
+        let data = [];
+        if(e !== null) {
+          data = JSON.parse(e);
+        } 
+        let cek = data.filter(person => person.id === item.id);
+        if(cek.length > 0){   
+          for (let index = 0; index < data.length; index++) {
+            if (data[index].id === item.id){
+              data.splice(index,1);
+              break;
+            }
+          }
+          
+          return _storeLocalData('_bookmark', data).then((e)=>{
+            return 'hapus';
+          });    
+        } else {        
+          data.push(item);
+          return _storeLocalData('_bookmark', data).then((e)=>{
+            return 'save';
+          });
+        }
+        
+    })
+  } catch (error) {
+    return false;
   }
-  return d.dt;
-}
+};
+export const _storeLocalData = async (key,data) => {
+  try {
+    data = JSON.stringify(data);
+    let r = await AsyncStorage.setItem(key, data);
+    return r;
+  } catch (error) {
+    return null;
+  }
+};
 
-// set local data
-export function removeHtmlStorage(name){
-    let app_name = config.core.app_name;
-    if(app_name === name){
-  		localStorage.removeItem(config.core.user_local_);
-      // localStorage.removeItem(config.core.cart_local_);
+export const _getLocalData = async (key) => {
+  try {
+    const value = await AsyncStorage.getItem(key)
+    if(value !== null) {
+      return JSON.parse(value);
     }
-
-		localStorage.removeItem(name);
-		localStorage.removeItem(name + '_time');
-}
-export function setHtmlStorage(name, value, expires){
-  		if (expires === undefined || expires === null) { expires = 1500*1; } // default: 2h
-  		let date = new Date();
-  		let schedule = Math.round((date.setSeconds(date.getSeconds() + expires)) / 1000);
-  		let	k = String(schedule);
-  		localStorage.setItem(name, JSON.stringify(value));
-  		localStorage.setItem(name + '_time', k);
-}
-export function statusHtmlStorage(name){
-		let date = new Date();
-		let current = Math.round(+date / 1000);
-		// Get Schedule
-		let stored_time = localStorage.getItem(name + '_time');
-		let	j = parseInt(stored_time,0);
-		if (stored_time === undefined || stored_time === null) { j = 0; }
-		// Expired
-		if (j < current) {
-			// Remove
-			removeHtmlStorage(name);
-			return 0;
-		} else {
-			return JSON.parse(localStorage.getItem(name));
-		}
+  } catch(e) {
+    // error reading value
+    return null;
+  }
 }

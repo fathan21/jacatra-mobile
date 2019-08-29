@@ -111,7 +111,7 @@ export class BlogListContainer extends React.Component {
                   blogs.map((blog, i) => {
                   return (
                     type_card == '1'? 
-                      <ArticleCard1 goToPage={goToPage} key={i}  data={blog}   />: 
+                      <ArticleCard2 goToPage={goToPage} key={i}  data={blog}   />: 
                       type_card == '3'? 
                       <ArticleCard3 goToPage={goToPage} key={i}  data={blog}   /> :
                       <ArticleCard2 goToPage={goToPage} key={i}  data={blog}   /> 

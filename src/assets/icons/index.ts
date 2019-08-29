@@ -10,19 +10,25 @@ import {
 } from './icon.component';
 
 
+export const BookmarkShapeWhite = (style: StyleProp<ImageStyle>): IconElement => {
+  const source: IconSource = {
+    imageSource: require('./bookmark-shape-black.png'),
+  };
+  return Icon(source, style);
+};
+
+export const BookmarkShapeBlack = (style: StyleProp<ImageStyle>): IconElement => {
+  const source: IconSource = {
+    imageSource: require('./icons8-bookmark-50.png'),
+  };
+  return Icon(source, style);
+};
 export const BookmarkShape = (style: StyleProp<ImageStyle>): IconElement => {
   const source: IconSource = {
     imageSource: require('./bookmark-shape-black.png'),
   };
   return Icon(source, style);
 };
-export const BookmarkShapeWhite = (style: StyleProp<ImageStyle>): IconElement => {
-  const source: IconSource = {
-    imageSource: require('./bookmark-shape-white.png'),
-  };
-  return Icon(source, style);
-};
-
 export const SearchIconOutline = (style: StyleProp<ImageStyle>): IconElement => {
   const source: IconSource = {
     imageSource: require('./search-outline.png'),

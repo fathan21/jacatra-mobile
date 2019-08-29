@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 import PropTypes from 'prop-types';
-import { View, Text, Button, ScrollView, StyleSheet } from "react-native";
+import { View, Text, Button, ScrollView, StyleSheet, Image } from "react-native";
 import { 
     createMaterialTopTabNavigator, createSwitchNavigator,
     createBottomTabNavigator, createStackNavigator, createAppContainer, createDrawerNavigator, NavigationActions } from "react-navigation";
@@ -20,21 +20,55 @@ import PageScreen from "../Screen/Page";
 import CategoryScreen from "../Screen/Category";
 import SearchScreen from "../Screen/Search";
 
+import theme, {globalStyle} from '../assets/style';
+import {logo} from '../assets/images';
+import { TouchableOpacity } from "react-native-gesture-handler";
+
 const styles = StyleSheet.create({
   icon: {
     width: 24,
     height: 24,
   },
   container: {
-    paddingTop:20
+    paddingTop:20,
+    backgroundColor:'#ffffff'
   },
   listItemTitle:{
-    fontSize:18
+    fontSize:18,
+    margin:0,
+    color: '#ffffff',
+    backgroundColor:'#ffffff'
   }
 });
 
 class drawerContentComponents extends Component {
     state={
+      menuSetting: [
+        {
+          name:'Bookmark',
+          link:'hubungi',
+          param:{id:'persija', title:' Persija'},
+          img:CameraIconFill
+        },
+        {
+          name:'Pengaturan',
+          link:'setting',
+          img:CameraIconFill,
+          param:{id:'home', title:' Beranda'},
+        },
+        {
+          name:'Teantang Kami',
+          link:'about',
+          param:{id:'tentangKami', title:' Artikel'},
+          img:CameraIconFill
+        },
+        {
+          name:'Hubungi Kami',
+          link:'hubungi',
+          param:{id:'persija', title:' Persija'},
+          img:CameraIconFill
+        },
+      ],
       menu: [
         {
           name:'Beranda',
@@ -86,7 +120,8 @@ class drawerContentComponents extends Component {
           param:{id:'galeri', title:'Galeri'},
           img:CameraIconFill
         }
-      ]
+      ],
+
     }
     navigateToScreen = ( route,param ) =>(
         () => {
@@ -103,21 +138,44 @@ class drawerContentComponents extends Component {
 
     renderItem = ({ item })=>{
       return (
-          <ListItem
-              titleStyle={styles.listItemTitle}
-              title={item.name}
-              onPress={this.navigateToScreen(item.link,item.param)}
-            />
+          
+        <TouchableOpacity
+          activeOpacity={0.9}
+          onPress={this.navigateToScreen(item.link,item.param)}
+          >
+            <View  style={{height: 30, borderBottomWidth: 0, width: '100%', 
+            marginVertical:5,paddingVertical:10, borderBottomColor:'#ffffff'}}>
+              <Text style={{color:'#5c171a',fontSize:16, marginLeft:10,fontWeight:'bold'}}>{item.name}</Text>
+            </View>
+        </TouchableOpacity>
       );
     }
     render() {
       return (
-          <View style={styles.container}>
+        <View style={{backgroundColor:'#ffffff'}}>
+          <View style={{marginBottom:10, display:'flex',justifyContent:'center', alignItems:'center',backgroundColor:'#5c171a',
+            height:90
+          }}>
+            <Image
+                style={globalStyle.logo}
+                source={logo.imageSource}
+              />
+          </View>
+          <ScrollView style={{backgroundColor:'#ffffff'}}>
               <List
+                style={{backgroundColor:'#ffffff', borderBottomWidth:1,paddingBottom:10, borderBottomColor:'#5c171a', marginBottom:10}}
+                descriptionStyle={{backgroundColor:'#ffffff'}}
                 data={this.state.menu}
                 renderItem={this.renderItem}
               />
-          </View>
+              <List
+                style={{backgroundColor:'#ffffff', borderBottomWidth:0,paddingBottom:10, borderBottomColor:'#5c171a'}}
+                descriptionStyle={{backgroundColor:'#ffffff'}}
+                data={this.state.menuSetting}
+                renderItem={this.renderItem}
+              />
+          </ScrollView>
+        </View>
       )
     }
 }
@@ -144,8 +202,12 @@ const DrawerNav = createDrawerNavigator({
   c: {
     screen: CategoryScreen
   },
-}, {
-  contentComponent: drawerContentComponents
+}, 
+{
+  contentComponent: drawerContentComponents,
+  style:{
+    backgroundColor:'#ffffff',
+  }
 });
 const AppNavigator = createStackNavigator({
   DrawerNav: DrawerNav,

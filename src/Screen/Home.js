@@ -2,25 +2,20 @@ import * as React from 'react';
 
 import { connect } from 'react-redux';
 import {
-    View, Dimensions, Text
+    View, Dimensions
 } from 'react-native';
 import {
   TabView,
   Tab,
   Layout,
-  Button
 } from 'react-native-ui-kitten';
 import Toast from 'react-native-easy-toast';
 
 const widthWindow = Dimensions.get('window').width;
-import {
-  MenuIconWhite,
-} from '@src/assets/icons';
-import {Header, RenderErrorBlog } from '../Component/';
+import {Header, RenderErrorBlog, GeneralStatusBarColor } from '../Component/';
 import {BlogListContainer } from '../Container';
 
 import {fetchBlogs, fetchHeadline, fetchPopuler} from '../Redux/Actions/Blog-actions';
-import {ArticleCard1} from '../Component';
 import theme from '../assets/style';
 
 
@@ -126,6 +121,8 @@ export class HomeScreen extends React.Component {
       //console.warn(this.props.blogs);
       return (
         <Layout style={{paddingBottom:40, position:'relative'}}>
+          <GeneralStatusBarColor backgroundColor={theme.PRIMARY_COLOR}
+            barStyle="light-content"/>
           {
             !this.state.hideHeader?<Header navigation={this.props.navigation} title={'Home'} />:null
           }

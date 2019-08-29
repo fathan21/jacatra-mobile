@@ -183,7 +183,7 @@ export  class BlogDetailContainer extends React.Component {
                   content?
                   <HTML html={content}
                     {...DEFAULT_PROPS}
-                    tagsStyles={{p:{padding:0,margin: 0,marginBottom:0,fontSize:14,color:'black',letterSpacing:0.5,textAlign:'justify'}}
+                    tagsStyles={{p:{padding:0,margin: 0 ,marginBottom:10,fontSize:14,color:'black',letterSpacing:0.5,textAlign:'justify'}}
                     }
                   />:null
                 }

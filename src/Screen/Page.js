@@ -4,8 +4,10 @@ import {
     Layout
 } from 'react-native-ui-kitten';
 import {api} from '../Redux/Actions';
+import Toast from 'react-native-easy-toast';
 
 import {App} from '../Redux/const';
+import {_isBookmark, _saveBookmark} from '../Redux/helper';
 import {RenderLoadingBlogDetail, RenderErrorBlog, HeaderBack } from '../Component/';
 import {BlogDetailContainer} from '../Container';
 export default class PageScreen extends React.Component {
@@ -16,10 +18,12 @@ export default class PageScreen extends React.Component {
     isRefreshing: false,
     loading: false,
     error: false, 
+    isBookmark: false,
     data: {},
     realted:[]
   } 
   _isMounted = false;
+  toast = null;
   constructor(props) {
     super(props);
     this._goToPage = this._goToPage.bind(this);
@@ -34,6 +38,7 @@ export default class PageScreen extends React.Component {
     this._isMounted = true;
     const { navigation } = this.props;
     const itemId = navigation.getParam('itemId', 'NO-ID');
+    
     this._getData(itemId);
   }
   componentWillUnmount(){
@@ -47,17 +52,29 @@ export default class PageScreen extends React.Component {
     });
   }
   
+  _toast = (msg) => {
+    this.toast.show(msg, 3000, () => {
+       // something you want to do at close
+   });
+  }
   __onRefresh = (itemId)=> {
     this.setState({isRefreshing:true},()=>{this._getData(itemId);})
   }
   
   _getData = (itemId) => {
     itemId = itemId.replace("/p/", "");
+    
+
     this.setState({loading:true},()=>{
       api.get('news_detail/' + itemId,{}).then((res) => {
         if(!this._isMounted){
           return;
         }
+        _isBookmark(res.data.data.id).then((e)=>{   
+          if(e) {
+            this.setState({isBookmark:true});
+          }
+        });
         this.setState({
           loading: false,
           isRefreshing:false,
@@ -148,7 +165,20 @@ export default class PageScreen extends React.Component {
         itemId: item.link,
     })
   };
-  
+  _saveBookmark=(item)=>{
+    if(!item.id){
+      return;
+    }
+    _saveBookmark(item).then((e)=>{
+      if(e === 'save'){            
+        this.setState({isBookmark:true});
+        this._toast(' berhasil di simpan jadi bookmark ');
+      } else {      
+        this.setState({isBookmark:false});
+        this._toast(' berhasil di hapus jadi bookmark ');
+      };
+    })
+  }
   render() {
     
     const { navigation } = this.props;
@@ -157,7 +187,10 @@ export default class PageScreen extends React.Component {
     if (this.state.loading) {
       return(
         <View>
-          <HeaderBack navigation = {this.props.navigation} title={'title'} share={this._shareText} data={this.state.data} />
+          <HeaderBack navigation = {this.props.navigation} title={'title'} share={this._shareText} data={this.state.data}
+              isBookmark={this.state.isBookmark}
+              saveBookmark={this._saveBookmark}
+          />
           <RenderLoadingBlogDetail />
         </View>
       );
@@ -165,7 +198,10 @@ export default class PageScreen extends React.Component {
     if (this.state.error) {
       return(
         <View>
-          <HeaderBack navigation = {this.props.navigation} title={'title'} />
+          <HeaderBack navigation = {this.props.navigation} title={'title'} share={this._shareText} data={this.state.data}
+              isBookmark={this.state.isBookmark}
+              saveBookmark={this._saveBookmark}
+          />
           <RenderErrorBlog getDatas={()=>this._getData(itemId)} />
         </View>
       );
@@ -173,7 +209,10 @@ export default class PageScreen extends React.Component {
 
     return (
       <Layout style={{paddingBottom:50}}>
-        <HeaderBack navigation = {this.props.navigation} title={'title'} share={this._shareText} data={this.state.data} />
+        <HeaderBack navigation = {this.props.navigation} title={'title'} share={this._shareText} data={this.state.data}
+            isBookmark={this.state.isBookmark}
+            saveBookmark={this._saveBookmark}
+        />
         <BlogDetailContainer
           data={this.state.data}
           isRefreshing={this.state.isRefreshing}
@@ -181,6 +220,10 @@ export default class PageScreen extends React.Component {
           realted={this.state.realted}
           goToPage={this._goToPage}
         />
+        
+        <Toast
+                opacity={1}
+                ref={ref => { this.toast = ref; }} />
       </Layout>
     );
   }

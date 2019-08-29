@@ -15,30 +15,13 @@ import {
 } from 'react-navigation';
 import {
     ArrowBackOutlineWhite,
-    BookmarkShapeWhite,
     BookmarkShape,
+    BookmarkShapeBlack,
 } from '@src/assets/icons';
 import theme, {globalStyle} from '../assets/style';
 import {logo} from '../assets/images';
 import { ShareOutlineWhite } from '../assets/icons';
 
-const BoomarkList = async ()=>{
-  let d = AsyncStorage.getItem('bookmark');
-  if(!d){
-    d = [];
-  };
-  return d;
-}
-
-const IsBoomark = (id)=>{
-  BoomarkList().then((dt)=>{
-    
-    let isB = dt.filter(n=>{
-      return n.id = id;
-    })
-    return isB;
-  })
-}
 
 export class HeaderBack extends React.Component {
     state = {
@@ -76,14 +59,15 @@ export class HeaderBack extends React.Component {
         );
     }
     renderRightControls = () => {
+      // console.warn(this.props.isBookmark);
         return (
           <View style = {{display: 'flex',flexDirection: 'row'}} >
             
             <Button
               style={globalStyle.btnHeader}
               size='large'
-              icon={BookmarkShapeWhite}
-              onPress={()=>this.props.navigation.goBack()}
+              icon={this.props.isBookmark?BookmarkShapeBlack:BookmarkShape}
+              onPress={()=>this.props.saveBookmark(this.props.data)}
             />
             
             <Button
