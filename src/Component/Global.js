@@ -7,12 +7,12 @@ import {
 import {Text, Button
 } from 'react-native-ui-kitten';
 import {ArticleCard2} from './ArticleCard2';
-import { globalStyle } from '../assets/style';
+import theme, { globalStyle } from '../assets/style';
 
 
 export const RenderErrorBlog = ({getDatas})=>{
     return (
-        <View >
+        <View style={{backgroundColor:theme.CARD_TEXT_BG}}>
             <View style={{textAlign:'center', marginVertical:50, marginHorizontal:16}}>
                 <Text style={{textAlign:'center',fontSize:15}}>
                 Koneksi gagal, silahkan coba lagi
@@ -26,7 +26,7 @@ export const RenderErrorBlog = ({getDatas})=>{
 }
 export const RenderLoadingBlogDetail = ()=>{
     return (
-      <View >
+      <View style={{backgroundColor:theme.CARD_TEXT_BG}}>
             <View style={{marginVertical:10,marginHorizontal:5, width:'90%', height:35,backgroundColor:'#e1e4e8'}}>
             </View>
             <View style={{marginVertical:1,marginHorizontal:5, width:'20%', height:20,backgroundColor:'#e1e4e8'}}>
@@ -77,7 +77,7 @@ export const RenderKeywordBlog = ({items})=>{
 export const RenderRelatedBlog = ({items,goToPage })=>{
     return (   
       <ScrollView style={{paddingVertical:5, marginHorizontal:10}}>
-        <Text style={{color:'black',fontWeight:'bold',fontSize:18,textTransform:'uppercase',borderBottomColor:'#5C171A', borderBottomWidth:3,width:100}}>
+        <Text style={{color:theme.CARD_TEXT_COLOR,fontWeight:'bold',fontSize:18,textTransform:'uppercase',borderBottomColor:'#5C171A', borderBottomWidth:3,width:100}}>
           Terkait
         </Text> 
         {

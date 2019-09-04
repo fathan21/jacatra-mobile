@@ -17,4 +17,7 @@ export const logo: ImageSource = {
 export const splashBg: ImageSource = {
   imageSource: require('./source/splash.png'),
 };
+export const icon: ImageSource = {
+  imageSource: require('./source/icon.png'),
+};
 

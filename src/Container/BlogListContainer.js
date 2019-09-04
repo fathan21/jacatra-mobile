@@ -4,7 +4,7 @@ import {
     StyleSheet,
     View,
     RefreshControl,
-    Text,
+    Text, Dimensions
 } from 'react-native';
 import { Button } from 'react-native-ui-kitten';
 
@@ -15,6 +15,9 @@ import {
 import theme  from '../assets/style';
 
 import {ArticleCard1, ArticleCard2, ArticleCard3 } from '../Component/';
+
+const widthWindow = Dimensions.get('window').width;
+const heightWindow = Dimensions.get('window').height;
 
 export class BlogListContainer extends React.Component {
     scroll = null;
@@ -56,8 +59,9 @@ export class BlogListContainer extends React.Component {
         hideHeader
       } = this.props;
       return (
-        <View>
+        <View style={{backgroundColor:theme.CARD_TEXT_BG,minHeight:heightWindow}}>
           <ScrollView
+            style={{backgroundColor:theme.CARD_TEXT_BG}}
             ref={(c) => {this.scroll = c}}
             onScroll ={
               ({nativeEvent}) => {

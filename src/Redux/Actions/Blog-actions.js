@@ -1,5 +1,5 @@
 import { api } from './';
-
+import {_getBookmark} from '../helper';
 const url = 'news';
 
 export function fetchBlogs(filter={cat:'',page:1,limit:20,q:''}){
@@ -14,6 +14,23 @@ export function fetchBlogs(filter={cat:'',page:1,limit:20,q:''}){
 }
 
 export function fetchBlogsCat(filter={cat:'',page:1,limit:20,q:''}){
+  if(filter.cat === 'bookmark'){
+    return dispatch => {
+      dispatch({type: 'FETCH_BLOGS_CAT_PENDING'});
+      
+      _getBookmark().then((e) => {
+          let res = {
+            data:{
+              data:e,
+              main:{},
+              count: 100,
+            },
+            cat:'bookmark'
+          };
+          dispatch({type:'FETCH_BLOGS_CAT_FULFILLED',payload: res});
+      });
+    }
+  }
   let params = {filter:filter};
   return dispatch => {
     dispatch({type: 'FETCH_BLOGS_CAT_PENDING'});

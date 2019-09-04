@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { StyleSheet, TouchableOpacity,ImageBackground, Dimensions } from 'react-native';
 import { Layout, Text } from 'react-native-ui-kitten';
+import theme from '../assets/style';
 
 const widthWindow = Dimensions.get('window').width;
 export const ArticleCard3 = ({data, goToPage, i})=> {
@@ -40,6 +41,7 @@ const styles = StyleSheet.create({
     display:'flex',
     justifyContent:'flex-start',
     alignItems:'flex-start',
+    backgroundColor: theme.CARD_TEXT_BG,
     borderBottomColor:'black',
     width:(widthWindow-32)
   },
@@ -64,10 +66,13 @@ const styles = StyleSheet.create({
       borderWidth:1,
       elevation: 2,
       borderColor: '#CCC',
+      backgroundColor: theme.CARD_TEXT_BG,
   },
   card3Title: {
     fontSize:16,
     fontWeight:'bold',
+    backgroundColor: theme.CARD_TEXT_BG,
+    color:theme.CARD_TEXT_COLOR,
     marginTop:0,
     textAlign:'center',
     marginBottom:0,

@@ -18,6 +18,7 @@ import HomeScreen from "../Screen/Home";
 import SplashScreen from "../Screen/SplashScreen";
 import PageScreen from "../Screen/Page";
 import CategoryScreen from "../Screen/Category";
+import SettingScreen from "../Screen/Setting";
 import SearchScreen from "../Screen/Search";
 
 import theme, {globalStyle} from '../assets/style';
@@ -46,26 +47,23 @@ class drawerContentComponents extends Component {
       menuSetting: [
         {
           name:'Bookmark',
-          link:'hubungi',
-          param:{id:'persija', title:' Persija'},
+          link:'c',
+          param:{id:'bookmark', title:' bookmark'},
           img:CameraIconFill
         },
         {
           name:'Pengaturan',
           link:'setting',
-          img:CameraIconFill,
-          param:{id:'home', title:' Beranda'},
+          param:{ link:'', type:'setting'},
         },
         {
           name:'Teantang Kami',
-          link:'about',
-          param:{id:'tentangKami', title:' Artikel'},
+          param:{ link:'tentang-kami', type:'page'},
           img:CameraIconFill
         },
         {
           name:'Hubungi Kami',
-          link:'hubungi',
-          param:{id:'persija', title:' Persija'},
+          param:{ link:'hubungi-kami', type:'page'},
           img:CameraIconFill
         },
       ],
@@ -125,6 +123,18 @@ class drawerContentComponents extends Component {
     }
     navigateToScreen = ( route,param ) =>(
         () => {
+        if (param.type == 'setting') { 
+          this.props.navigation.closeDrawer();
+          this.props.navigation.push('Setting')
+          return;
+        }
+        if (param.type == 'page') { 
+          this.props.navigation.closeDrawer();
+          this.props.navigation.push('Page', {
+              itemId: param.link,
+          })
+          return;
+        }
         let d =  Math.random () * 10000;
         // console.warn(d);
         const navigateAction = NavigationActions.navigate({
@@ -143,18 +153,19 @@ class drawerContentComponents extends Component {
           activeOpacity={0.9}
           onPress={this.navigateToScreen(item.link,item.param)}
           >
-            <View  style={{height: 30, borderBottomWidth: 0, width: '100%', 
-            marginVertical:5,paddingVertical:10, borderBottomColor:'#ffffff'}}>
-              <Text style={{color:'#5c171a',fontSize:16, marginLeft:10,fontWeight:'bold'}}>{item.name}</Text>
+            <View  style={{ borderBottomWidth: 0, width: '100%',
+            marginVertical:5,paddingVertical:0, borderBottomColor:'#ffffff'}}>
+              <Text style={{color:theme.PRIMARY_COLOR,fontSize:16, marginLeft:10,fontWeight:'bold'}}>{item.name}</Text>
             </View>
         </TouchableOpacity>
       );
     }
+
     render() {
       return (
         <View style={{backgroundColor:'#ffffff'}}>
-          <View style={{marginBottom:10, display:'flex',justifyContent:'center', alignItems:'center',backgroundColor:'#5c171a',
-            height:90
+          <View style={{marginBottom:10, display:'flex',justifyContent:'flex-end', alignItems:'center',backgroundColor:theme.PRIMARY_COLOR,
+            height:90, paddingBottom:10
           }}>
             <Image
                 style={globalStyle.logo}
@@ -163,13 +174,13 @@ class drawerContentComponents extends Component {
           </View>
           <ScrollView style={{backgroundColor:'#ffffff'}}>
               <List
-                style={{backgroundColor:'#ffffff', borderBottomWidth:1,paddingBottom:10, borderBottomColor:'#5c171a', marginBottom:10}}
+                style={{backgroundColor:'#ffffff', borderBottomWidth:1,paddingBottom:10, borderBottomColor:theme.PRIMARY_COLOR, marginBottom:10}}
                 descriptionStyle={{backgroundColor:'#ffffff'}}
                 data={this.state.menu}
                 renderItem={this.renderItem}
               />
               <List
-                style={{backgroundColor:'#ffffff', borderBottomWidth:0,paddingBottom:10, borderBottomColor:'#5c171a'}}
+                style={{backgroundColor:'#ffffff', borderBottomWidth:0,paddingBottom:10, borderBottomColor:theme.PRIMARY_COLOR}}
                 descriptionStyle={{backgroundColor:'#ffffff'}}
                 data={this.state.menuSetting}
                 renderItem={this.renderItem}
@@ -212,6 +223,7 @@ const DrawerNav = createDrawerNavigator({
 const AppNavigator = createStackNavigator({
   DrawerNav: DrawerNav,
   Page: PageScreen,
+  Setting: SettingScreen,
   Search: SearchScreen
 },{
   headerMode: "none"

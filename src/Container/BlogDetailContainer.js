@@ -11,6 +11,9 @@ import SwiperFlatList from 'react-native-swiper-flatlist';
 import { WebView } from "react-native-webview";
 
 import {RenderKeywordBlog, RenderRelatedBlog, } from '../Component/';
+import theme from "../assets/style";
+
+const heightWindow = Dimensions.get('window').height;
 const widthWindow = Dimensions.get('window').width;
 export  class BlogDetailContainer extends React.Component {
   state = {
@@ -98,6 +101,7 @@ export  class BlogDetailContainer extends React.Component {
         htmlStyles: CUSTOM_STYLES,
         renderers: CUSTOM_RENDERERS,
         imagesMaxWidth: IMAGES_MAX_WIDTH  - 20,
+        marginTop:20,
         onLinkPress: (evt, href) => { Linking.openURL(href); },
         debug: true
     };
@@ -149,7 +153,7 @@ export  class BlogDetailContainer extends React.Component {
 
 
     return (
-      <Layout style={{paddingBottom:50}}>
+      <Layout style={{paddingBottom:50, backgroundColor:theme.CARD_TEXT_BG,minHeight:heightWindow}}>
         <ScrollView 
           refreshControl={
               <RefreshControl
@@ -165,7 +169,7 @@ export  class BlogDetailContainer extends React.Component {
           >
             <ScrollView  style={{ flex: 1, marginHorizontal:0, marginTop:0,paddingBottom:10 }}>        
               <View style={{marginVertical:10,marginHorizontal:10}}>
-                <Text style={{fontSize:20,fontWeight:'bold', marginBottom:10,color:'#000000', letterSpacing:1.5, textAlign:'justify'}}>
+                <Text style={{fontSize:20,fontWeight:'bold', marginBottom:10,color:theme.CARD_TEXT_COLOR, letterSpacing:1.5, textAlign:'justify'}}>
                   {data.title}
                 </Text>
                 <Text style={{fontSize:11,color:'#767676', textTransform:'capitalize'}}>
@@ -178,19 +182,24 @@ export  class BlogDetailContainer extends React.Component {
                 data.title?
                 media:null
               }
-              <View style={{marginHorizontal:10}}>
+              <View style={{marginHorizontal:10, minHeight:heightWindow, marginVertical:20}}>
                 {
                   content?
                   <HTML html={content}
                     {...DEFAULT_PROPS}
-                    tagsStyles={{p:{padding:0,margin: 0 ,marginBottom:10,fontSize:14,color:'black',letterSpacing:0.5,textAlign:'justify'}}
+                    tagsStyles={{p:{padding:0,margin:2,marginBottom:10,fontSize:14,color:'black',letterSpacing:1,textAlign:'justify', color: theme.CARD_TEXT_COLOR,}}
                     }
                   />:null
                 }
               </View>
             </ScrollView>
-            <RenderKeywordBlog items={(data.tags).split(',')} />
-            <RenderRelatedBlog items={realted} goToPage={goToPage} />
+            {
+              data.tags?<RenderKeywordBlog items={(data.tags).split(',')} />:null
+            }
+            {
+              realted.length >0 ?<RenderRelatedBlog items={realted} goToPage={goToPage} />:null
+            }
+            
         </ScrollView>
         {
           data.title?

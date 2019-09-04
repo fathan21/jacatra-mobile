@@ -4,6 +4,7 @@ import { Layout, Text } from 'react-native-ui-kitten';
 
 import ProgressiveImage from './ProgressiveImage';
 import {toDateIndo} from '../Redux/helper';
+import theme from '../assets/style';
 
 const widthWindow = Dimensions.get('window').width;
 export const ArticleCard2 =({data, goToPage}) => {
@@ -48,6 +49,7 @@ const styles = StyleSheet.create({
     alignItems:'flex-start',
     borderBottomWidth: 1,
     borderColor: '#cccccc',
+    backgroundColor: theme.CARD_TEXT_BG
   },
   card2Description: {
       width:widthWindow - 130,
@@ -60,8 +62,10 @@ const styles = StyleSheet.create({
       paddingLeft:16,
       paddingRight:16,
       paddingBottom:0,
+      backgroundColor: theme.CARD_TEXT_BG
   },
   card2Title: {
+    color:theme.CARD_TEXT_COLOR,
     fontSize:16,
     fontWeight:'bold',
     marginTop:0,

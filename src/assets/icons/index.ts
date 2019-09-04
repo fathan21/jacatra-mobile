@@ -10,6 +10,12 @@ import {
 } from './icon.component';
 
 
+export const Close = (style: StyleProp<ImageStyle>): IconElement => {
+  const source: IconSource = {
+    imageSource: require('./close-outline.png'),
+  };
+  return Icon(source, style);
+};
 export const BookmarkShapeWhite = (style: StyleProp<ImageStyle>): IconElement => {
   const source: IconSource = {
     imageSource: require('./bookmark-shape-black.png'),

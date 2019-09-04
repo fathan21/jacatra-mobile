@@ -7,7 +7,7 @@ import {
 import {
   SafeAreaView as SafeAreaViewReactNavigation,
 } from 'react-navigation';
-import {RenderErrorBlog} from '../Component';
+import {RenderErrorBlog, GeneralStatusBarColor} from '../Component';
 
 import {api} from '../Redux/Actions';
 import {
@@ -15,7 +15,7 @@ import {
 } from '@src/assets/icons';
 import theme from '../assets/style';
 
-import {ArticleCard1, ArticleCard2, ArticleCard3 } from '../Component/';
+import { ArticleCard2 } from '../Component/';
 
 const widthWindow = Dimensions.get('window').width;
 export default class SarchScreen extends React.Component {
@@ -159,6 +159,8 @@ export default class SarchScreen extends React.Component {
     return (
       <Layout style={{paddingBottom:50}}>
         
+        <GeneralStatusBarColor backgroundColor={theme.PRIMARY_COLOR}
+                  barStyle="light-content"/>
         <SafeAreaViewReactNavigation >
           <TopNavigation alignment = 'start'
               style={{backgroundColor:theme.PRIMARY_COLOR, marginBottom:10, color:theme.PRIMARY_TEXT_COLOR}}

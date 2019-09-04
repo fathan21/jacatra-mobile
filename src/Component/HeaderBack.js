@@ -2,8 +2,10 @@ import * as React from 'react';
 import {
     StyleSheet,
     View,
-    Image, AsyncStorage
+    Image,
 } from 'react-native';
+
+import {GeneralStatusBarColor} from './GeneralStatusBarColor';
 import {
     Button,
 } from 'react-native-ui-kitten';
@@ -40,13 +42,8 @@ export class HeaderBack extends React.Component {
           <View style = {{display: 'flex',flexDirection: 'row', alignItems:'center'}} >
             
             <Button
-              style={{
-                  width:40,height:40, 
-                  backgroundColor:theme.PRIMARY_COLOR, 
-                  color:theme.PRIMARY_TEXT_COLOR,
-                  padding:0,
-                  display:'flex', alignItems:'center',justifyContent:'center', borderWidth:0
-              }}
+            
+            style={globalStyle.btnHeader}
               size='large'
               icon={ArrowBackOutlineWhite}
               onPress={()=>this.props.navigation.goBack()}
@@ -85,12 +82,13 @@ export class HeaderBack extends React.Component {
       // console.warn(isB);    
         return (
               <SafeAreaViewReactNavigation >
+                
+                <GeneralStatusBarColor backgroundColor={theme.PRIMARY_COLOR}
+                  barStyle="light-content"/>
                 <TopNavigation alignment = 'start'
-                    style={{backgroundColor:theme.PRIMARY_COLOR, marginBottom:10, color:theme.PRIMARY_TEXT_COLOR}}
+                    style={{backgroundColor:theme.PRIMARY_HEADER_BG, marginBottom:0, color:theme.PRIMARY_TEXT_COLOR}}
                     leftControl={this.renderLeftControl()}
-                    rightControls = {
-                      this.renderRightControls()
-                    }
+                    rightControls = {data?this.renderRightControls():null}
                     />
                 </SafeAreaViewReactNavigation>
               );

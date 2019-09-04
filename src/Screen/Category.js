@@ -111,7 +111,7 @@ export class CategoryScreen extends React.Component {
         return(
           <View>
             <Header navigation = {this.props.navigation} title={params.title} />
-            <RenderErrorBlog />
+            <RenderErrorBlog getDatas={this._getDatas} />
           </View>
         );
       }

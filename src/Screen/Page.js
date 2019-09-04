@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Share } from "react-native";
+import { View, Share, Dimensions } from "react-native";
 import {
     Layout
 } from 'react-native-ui-kitten';
@@ -10,6 +10,9 @@ import {App} from '../Redux/const';
 import {_isBookmark, _saveBookmark} from '../Redux/helper';
 import {RenderLoadingBlogDetail, RenderErrorBlog, HeaderBack } from '../Component/';
 import {BlogDetailContainer} from '../Container';
+import theme from "../assets/style";
+const widthWindow = Dimensions.get('window').width;
+const heightWindow = Dimensions.get('window').height;
 export default class PageScreen extends React.Component {
   static navigationOptions = {
       header: null
@@ -79,7 +82,13 @@ export default class PageScreen extends React.Component {
           loading: false,
           isRefreshing:false,
           data: res.data.data
-        },()=>{this._getRelated(itemId)});
+        },()=>{
+          if (itemId == 'hubungi-kami' || itemId == 'tentang-kami') {
+            
+          } else {
+            this._getRelated(itemId)
+          }
+        });
       }).catch((e)=>{
         if(!this._isMounted){
           return;
@@ -186,7 +195,7 @@ export default class PageScreen extends React.Component {
 
     if (this.state.loading) {
       return(
-        <View>
+        <View style={{backgroundColor:theme.CARD_TEXT_BG,minHeight:heightWindow}}>
           <HeaderBack navigation = {this.props.navigation} title={'title'} share={this._shareText} data={this.state.data}
               isBookmark={this.state.isBookmark}
               saveBookmark={this._saveBookmark}
@@ -197,7 +206,7 @@ export default class PageScreen extends React.Component {
     }
     if (this.state.error) {
       return(
-        <View>
+        <View style={{backgroundColor:theme.CARD_TEXT_BG,minHeight:heightWindow}}>
           <HeaderBack navigation = {this.props.navigation} title={'title'} share={this._shareText} data={this.state.data}
               isBookmark={this.state.isBookmark}
               saveBookmark={this._saveBookmark}

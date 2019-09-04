@@ -101,7 +101,8 @@ export default (state=defaultState, action={}) => {
     }
     
     case 'FETCH_BLOGS_CAT_FULFILLED': {
-      // console.warn(action.payload.cat);
+      //console.warn(action.payload.cat);
+      //console.log(action.payload);
       let blogsByCat = jsonCopy(state.blogsByCat);
       let blogMainByCat = jsonCopy(state.blogMainByCat);
       let blogCountByCat = jsonCopy(state.blogCountByCat);

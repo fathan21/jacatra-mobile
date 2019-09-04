@@ -1,6 +1,8 @@
 import {parse, differenceInHours, format, distanceInWordsToNow} from 'date-fns';
 import AsyncStorage from '@react-native-community/async-storage';
-const idDateFns = require('date-fns/locale/id')
+import {api} from '../Redux/Actions';
+const idDateFns = require('date-fns/locale/id');
+
 
 export function toDateIndo(value) {
 	if(!value){
@@ -26,58 +28,7 @@ export function toDate(value) {
   return `${format(value,'MMMM DD, YYYY HH:mm',{locale: idDateFns})}`;
 }
 
-export function setMetta(meta_temp) {
-  let meta = {};
-  let app_setting = getAppSetting();
-  if (typeof app_setting['menu'] === 'undefined') {
-  }else{
-    meta = {
-      title:app_setting['site_title'],
-      keywords:app_setting['site_keywords'],
-      site_subtitle:app_setting['site_subtitle'],
-      description:app_setting['site_subtitle'],
-      menu:app_setting['menu'],
-      img:app_setting['site_logo'],
-      type:'article',
-      twitter:app_setting['twitter'],
-      wa:(app_setting['site_wa']).replace('+',''),
-      fb:app_setting['social_facebook'],
-      ig:app_setting['social_ig'],
-    };
-  }
 
-
-  if (meta_temp.title !== undefined) {
-    meta.title = meta_temp.title + ' - ' +meta.title;
-  }
-  if (meta_temp.description !== undefined) {
-    meta.description = meta.description +' - '+ meta_temp.description;
-  }
-  if (meta_temp.keyword !== undefined) {
-    meta.keyword = meta_temp.keyword;
-  }
-  if (meta_temp.type !== undefined) {
-    meta.type = meta_temp.type;
-  }
-  if (meta_temp.img !== undefined) {
-    meta.img = meta_temp.img;
-  }
-
-  return(
-    <Helmet>
-      <meta charSet="utf-8" />
-      <title>{meta.title}</title>
-      <meta name="description" content={meta.description}  />
-      <meta name="keywords" content={meta.keyword} />
-      <meta property="og:type" content={meta.type} />
-      <link rel="canonical" href={window.location.href} />
-      <meta property="og:title" content={meta.title} />
-      <meta property="og:description" content={meta.description} />
-      <meta property="og:url" content={window.location.href} />
-      <meta property="og:image" content={meta.img} />
-    </Helmet>
-  )
-}
 export function parseQueryParams(query) {
     //You get a '?key=asdfghjkl1234567890&val=123&val2&val3=other'
     if(!query){
@@ -143,6 +94,20 @@ export const _isBookmark = async (id) => {
   }
 };
 
+export const _getBookmark = async () => {
+  try {
+    return AsyncStorage.getItem('_bookmark').then((e)=>{
+        let data = [];
+        if(e !== null) {
+          data = JSON.parse(e);
+        } 
+        return data;
+        
+    })
+  } catch (error) {
+    return [];
+  }
+};
 export const _saveBookmark = async (item) => {
   try {
 
@@ -195,4 +160,74 @@ export const _getLocalData = async (key) => {
     // error reading value
     return null;
   }
+}
+
+export const removeHtmlStorage = async(name) =>{
+  //localStorage.removeItem(name);
+  //localStorage.removeItem(name+'_time');
+  try {
+    await AsyncStorage.multiRemove([name, name+'_time']);
+  } catch (error) {
+    // Error saving data
+  }
+}
+
+export const  setHtmlStorage = async (name, value, expires) =>{
+  value = JSON.stringify(value);
+  if (expires==undefined || expires=='null') { var expires = 3600; } // default: 1h
+
+  var date = new Date();
+  var schedule = Math.round((date.setSeconds(date.getSeconds()+expires))/1000);
+
+  // localStorage.setItem(name, value);
+  // localStorage.setItem(name+'_time', schedule);
+  try {
+    await AsyncStorage.multiSet([[name, value],[name+'_time', schedule]]);
+    return JSON.parse(value);
+  } catch (error) {
+    // Error saving data
+    return null;
+  }
+}
+
+export const statusHtmlStorage = async (name) => {
+  var date = new Date();
+  var current = Math.round(+date/1000);
+  try {
+    const stored_time = await AsyncStorage.get(name+'_time');
+    // Get Schedule
+    // var stored_time = localStorage.getItem(name+'_time');
+    if (stored_time==undefined || stored_time==null) { stored_time = 0; }
+
+    // Expired
+    if (stored_time < current) {
+        // Remove
+        removeHtmlStorage(name);
+        return 0;
+    } else {
+        
+        const dt = await AsyncStorage.get(name);
+        return JSON.parse(dt);
+    } 
+  } catch (error) {
+    // Error retrieving data
+    return 0;
+  }
+}
+export  const getAppSetting= async() => {
+ 
+  try {
+    let dt = await statusHtmlStorage('_setting');
+    if (dt == 0 ){
+      return api.get('setting').then((res)=>{
+        setHtmlStorage('_setting',  res.data.data);
+        return res.data.data;
+      });
+    } else {
+      return dt;
+    }
+  } catch (error) {
+    return null;
+  }
+  
 }

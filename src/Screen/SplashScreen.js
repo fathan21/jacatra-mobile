@@ -1,12 +1,14 @@
 import React from "react";
-import { View,Text, ImageBackground, Dimensions } from "react-native";
+import { View,ImageBackground } from "react-native";
+import {getAppSetting} from '../Redux/helper';
 
-
-const widthWindow = Dimensions.get('window').width;
-const heightWindow = Dimensions.get('window').height;
-import {splashBg} from '../assets/images';
+import {logo} from '../assets/images';
+import theme from "../assets/style";
 export default class SplashScreen extends React.Component {
   performTimeConsumingTask = async() => {
+    getAppSetting().then((e)=>{
+      // return e;
+    });
     return new Promise((resolve) =>
       setTimeout(
         () => { resolve('result') },
@@ -23,10 +25,30 @@ export default class SplashScreen extends React.Component {
       this.props.navigation.navigate('App');
     }
   }
+ /*
+  function updateAppNotice(){
+    const APP_STORE_LINK = 'itms://itunes.apple.com/us/app/apple-store/myiosappid?mt=8';
+    const PLAY_STORE_LINK = 'market://details?id=myandroidappid';
+    Alert.alert(
+       'Update Available',
+       'This version of the app is outdated. Please update app from the '+(Platform.OS =='ios' ? 'app store' : 'play store')+'.',
+       [
+           {text: 'Update Now', onPress: () => {
+               if(Platform.OS =='ios'){
+                   Linking.openURL(APP_STORE_LINK).catch(err => console.error('An error occurred', err));
+               }
+               else{
+                   Linking.openURL(PLAY_STORE_LINK).catch(err => console.error('An error occurred', err));
+               }
+           }},
+       ]
+   );
+}
+*/
   render() {
     return ( 
     <View style={styles.viewStyles}>
-      <ImageBackground source={splashBg.imageSource} style={styles.bg}>
+      <ImageBackground source={logo.imageSource} style={styles.bg}>
       </ImageBackground>
     </View>
     );
@@ -37,10 +59,10 @@ const styles = {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: 'orange'
+    backgroundColor: theme.PRIMARY_COLOR
   },
   bg: {
-    width: widthWindow,
-    height: heightWindow
+    width: 300,
+    height: 100
   }
 }

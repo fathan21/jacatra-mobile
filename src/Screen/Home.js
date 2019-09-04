@@ -12,7 +12,7 @@ import {
 import Toast from 'react-native-easy-toast';
 
 const widthWindow = Dimensions.get('window').width;
-import {Header, RenderErrorBlog, GeneralStatusBarColor } from '../Component/';
+import {Header, RenderErrorBlog } from '../Component/';
 import {BlogListContainer } from '../Container';
 
 import {fetchBlogs, fetchHeadline, fetchPopuler} from '../Redux/Actions/Blog-actions';
@@ -120,22 +120,20 @@ export class HomeScreen extends React.Component {
       }
       //console.warn(this.props.blogs);
       return (
-        <Layout style={{paddingBottom:40, position:'relative'}}>
-          <GeneralStatusBarColor backgroundColor={theme.PRIMARY_COLOR}
-            barStyle="light-content"/>
+        <Layout style={{paddingBottom:40, position:'relative', backgroundColor:theme.CARD_TEXT_BG}}>
           {
             !this.state.hideHeader?<Header navigation={this.props.navigation} title={'Home'} />:null
           }
             <TabView
                style={{margin:0,padding:0,}}
-               tabBarStyle={{backgroundColor:theme.PRIMARY_COLOR, color:theme.PRIMARY_TEXT_COLOR, paddingBottom:5,
+               tabBarStyle={{backgroundColor:theme.PRIMARY_HEADER_BG, color:theme.PRIMARY_TEXT_COLOR, paddingBottom:5,
                 }}
                indicatorStyle={{backgroundColor:theme.PRIMARY_TEXT_COLOR, marginTop:-5}}
 
               selectedIndex={this.state.selectedIndexTab}
               shouldLoadComponent={this._shouldLoadTabContent}
               onSelect={this._onSelect}>
-              <Tab title='Terbaru' titleStyle={{backgroundColor:theme.PRIMARY_COLOR, color:theme.PRIMARY_TEXT_COLOR}}>
+              <Tab title='Terbaru' titleStyle={{ color:'#cccccc'}}>
                 <BlogListContainer
                   hasMore={this.state.hasMore}
                   isRefreshing={this.state.isRefreshing}
@@ -152,7 +150,7 @@ export class HomeScreen extends React.Component {
                 />
               </Tab>
               
-              <Tab title='Headline' titleStyle={{backgroundColor:theme.PRIMARY_COLOR, color:theme.PRIMARY_TEXT_COLOR,}}>
+              <Tab title='Headline' titleStyle={{ color:'#CCCCCC',}}>
                 <BlogListContainer
                     hasMore={false}
                     isRefreshing={false}
@@ -169,7 +167,7 @@ export class HomeScreen extends React.Component {
                     blogMain={{}}
                   />
               </Tab>
-              <Tab title='Terpopuler' titleStyle={{backgroundColor:theme.PRIMARY_COLOR, color:theme.PRIMARY_TEXT_COLOR,}}>
+              <Tab title='Terpopuler' titleStyle={{ color:'#CCCCCC',}}>
                 <BlogListContainer
                     hasMore={false}
                     isRefreshing={false}

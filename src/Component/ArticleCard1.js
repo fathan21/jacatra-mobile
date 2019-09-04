@@ -2,6 +2,8 @@ import * as React from 'react';
 import { StyleSheet,  TouchableOpacity, Dimensions } from 'react-native';
 import { Layout, Text } from 'react-native-ui-kitten';
 
+import theme from "../assets/style";
+
 import {toDateIndo} from '../Redux/helper';
 const widthWindow = Dimensions.get('window').width;
 import ProgressiveImage from './ProgressiveImage';
@@ -48,8 +50,10 @@ const styles = StyleSheet.create({
       paddingLeft:16,
       paddingRight:16,
       paddingBottom:10,
+      backgroundColor:theme.CARD_TEXT_BG
   },
   card1Title: {
+    color:theme.CARD_TEXT_COLOR,
     fontSize:18,
     fontWeight:'bold',
     marginTop:10,
