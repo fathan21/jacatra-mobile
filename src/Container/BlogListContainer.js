@@ -61,7 +61,7 @@ export class BlogListContainer extends React.Component {
       return (
         <View style={{backgroundColor:theme.CARD_TEXT_BG,minHeight:heightWindow}}>
           <ScrollView
-            style={{backgroundColor:theme.CARD_TEXT_BG}}
+            style={{backgroundColor:theme.CARD_TEXT_BG, marginBottom:20}}
             ref={(c) => {this.scroll = c}}
             onScroll ={
               ({nativeEvent}) => {
@@ -102,7 +102,7 @@ export class BlogListContainer extends React.Component {
             >
             <View>
               {
-                  blogLoading || blogError.global?
+                  (blogLoading || blogError.global) && !blogMain.title?
                   <ArticleCard1 goToPage={()=>{}} data={{}}  /> :
                     blogMain.title?
                     <ArticleCard1 goToPage={()=>{goToPage(blogMain)}} data={blogMain}  />

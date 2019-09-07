@@ -11,7 +11,7 @@ import {
 } from 'react-native-ui-kitten';
 
 import {
-    CameraIconFill,
+    MenuIconWhite,
 } from '@src/assets/icons';
 
 import HomeScreen from "../Screen/Home";
@@ -49,7 +49,7 @@ class drawerContentComponents extends Component {
           name:'Bookmark',
           link:'c',
           param:{id:'bookmark', title:' bookmark'},
-          img:CameraIconFill
+          img:MenuIconWhite
         },
         {
           name:'Pengaturan',
@@ -59,64 +59,64 @@ class drawerContentComponents extends Component {
         {
           name:'Teantang Kami',
           param:{ link:'tentang-kami', type:'page'},
-          img:CameraIconFill
+          img:MenuIconWhite
         },
         {
           name:'Hubungi Kami',
           param:{ link:'hubungi-kami', type:'page'},
-          img:CameraIconFill
+          img:MenuIconWhite
         },
       ],
       menu: [
         {
           name:'Beranda',
           link:'home',
-          img:CameraIconFill,
+          img:MenuIconWhite,
           param:{id:'home', title:' Beranda'},
         },
         {
           name:'Artikel',
           link:'c',
           param:{id:'artikel', title:' Artikel'},
-          img:CameraIconFill
+          img:MenuIconWhite
         },
         {
           name:'Persija',
           link:'c',
           param:{id:'persija', title:' Persija'},
-          img:CameraIconFill
+          img:MenuIconWhite
         },
         {
           name:'Sepak Bola',
           link:'c',
           param:{id:'sepak-bola', title:'Sepak Bola'},
-          img:CameraIconFill
+          img:MenuIconWhite
         },
         {
           name:'Arena',
           link:'/c/arena',
           link:'c',
           param:{id:'arena', title:'Arena'},
-          img:CameraIconFill
+          img:MenuIconWhite
         },
         {
           name:'Gaya Hidup',
           link:'/c/gaya-hidup',
           link:'c',
           param:{id:'gaya-hidup', title:'Gaya Hidup'},
-          img:CameraIconFill
+          img:MenuIconWhite
         },
         {
           name:"Rob's Attack",
           link:'c',
           param:{id:'rob-s-attack', title:"Rob's Attack"},
-          img:CameraIconFill
+          img:MenuIconWhite
         },
         {
           name:'Galeri',
           link:'c',
           param:{id:'galeri', title:'Galeri'},
-          img:CameraIconFill
+          img:MenuIconWhite
         }
       ],
 

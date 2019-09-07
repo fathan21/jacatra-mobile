@@ -51,7 +51,8 @@ export default class PageScreen extends React.Component {
       loading: false,
       error: false, 
       data: {},
-      realted:[]
+      realted:[],
+      fontSizeType:1
     });
   }
   
@@ -102,11 +103,11 @@ export default class PageScreen extends React.Component {
     });
   }
   _getRelated = (itemId) => {
-    itemId = itemId.replace("/p/", "");
+    itemId = itemId.replace("/p/", "").split(" ").join("-");
+    console.log(itemId);
     api.get('news_detail_related/' + itemId,{}).then((res) => {
-      if(!this._isMounted){
-        return;
-      }
+      
+      console.log(res);
       this.setState({
         loading: false,
         realted: res.data.data
@@ -136,8 +137,7 @@ export default class PageScreen extends React.Component {
     const link = decodeURI(App.base_url + itemId);
     Share.share(
       {
-        message: data.title ,
-        url: link,
+        message: link + '\n' + data.title ,
         //url: 'https://www.npmjs.com/package/react-native-video',
         title: data.title,
       },
@@ -157,11 +157,14 @@ export default class PageScreen extends React.Component {
         this.setState({
           result: 'shared with an activityType: ' + result.activityType,
         });
+        this._toast('shared with an activityType: ' + result.activityType);
       } else {
         this.setState({result: 'shared'});
+        this._toast('shared');
       }
     } else if (result.action === Share.dismissedAction) {
       this.setState({result: 'dismissed'});
+      this._toast('dismissed');
     }
   }
   
@@ -187,6 +190,9 @@ export default class PageScreen extends React.Component {
         this._toast(' berhasil di hapus jadi bookmark ');
       };
     })
+  }
+  _fontSizeChange=(e)=>{
+    this.setState({fontSizeType:e}) 
   }
   render() {
     
@@ -217,10 +223,11 @@ export default class PageScreen extends React.Component {
     }
 
     return (
-      <Layout style={{paddingBottom:50}}>
+      <Layout style={{paddingBottom:0}}>
         <HeaderBack navigation = {this.props.navigation} title={'title'} share={this._shareText} data={this.state.data}
             isBookmark={this.state.isBookmark}
             saveBookmark={this._saveBookmark}
+            fontSizeChange={this._fontSizeChange}
         />
         <BlogDetailContainer
           data={this.state.data}
@@ -228,6 +235,7 @@ export default class PageScreen extends React.Component {
           onRefresh={this._onRefresh}
           realted={this.state.realted}
           goToPage={this._goToPage}
+          fontSizeType={this.state.fontSizeType}
         />
         
         <Toast

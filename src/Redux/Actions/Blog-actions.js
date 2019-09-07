@@ -4,12 +4,23 @@ const url = 'news';
 
 export function fetchBlogs(filter={cat:'',page:1,limit:20,q:''}){
   let params = {filter:filter};
-  // console.warn(params);
-  return dispatch => {
-    return dispatch({
-      type: 'FETCH_BLOGS',
-      payload: api.post(`${url}`, params)
-    })
+  //console.warn(params);
+  if(filter.page==1){
+    
+    return dispatch => {
+      return dispatch({
+        type: 'FETCH_BLOGS_NEW',
+        payload: api.post(`${url}`, params)
+      })
+    }
+  } else {
+    
+    return dispatch => {
+      return dispatch({
+        type: 'FETCH_BLOGS',
+        payload: api.post(`${url}`, params)
+      })
+    }
   }
 }
 
@@ -25,7 +36,8 @@ export function fetchBlogsCat(filter={cat:'',page:1,limit:20,q:''}){
               main:{},
               count: 100,
             },
-            cat:'bookmark'
+            cat:'bookmark',
+            page:filter.page
           };
           dispatch({type:'FETCH_BLOGS_CAT_FULFILLED',payload: res});
       });
@@ -40,6 +52,7 @@ export function fetchBlogsCat(filter={cat:'',page:1,limit:20,q:''}){
             throw(res.error);
         }
         res.cat = filter.cat;
+        res.page = filter.page;
         dispatch({type:'FETCH_BLOGS_CAT_FULFILLED',payload: res});
         return res;
       })

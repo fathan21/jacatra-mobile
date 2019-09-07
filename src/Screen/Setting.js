@@ -67,8 +67,8 @@ export default class SettingScreen extends React.Component {
       }
     Share.share(
       {
-        message: name ,
-        url: link,
+        message: link  + '\n' + name ,
+        // url: link,
         //url: 'https://www.npmjs.com/package/react-native-video',
         title: name,
       },

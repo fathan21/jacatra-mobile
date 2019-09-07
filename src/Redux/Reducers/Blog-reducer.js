@@ -85,6 +85,22 @@ export default (state=defaultState, action={}) => {
         blogError: {}
       }
     }
+    
+    case 'FETCH_BLOGS_NEW_FULFILLED': {
+      // console.warn(action.payload.data.main);
+      let blogMain = state.blogMain;
+      if(!blogMain.id) {
+        blogMain = action.payload.data.main;
+      }
+      return {
+        ...state,
+        blogs: action.payload.data.data,
+        blogMain: blogMain,
+        blogLoading: false,
+        blogCount:action.payload.data.count,
+        blogError: {}
+      }
+    }
     case 'FETCH_BLOGS_PENDING': {
       return {
         ...state,
@@ -102,12 +118,20 @@ export default (state=defaultState, action={}) => {
     
     case 'FETCH_BLOGS_CAT_FULFILLED': {
       //console.warn(action.payload.cat);
-      //console.log(action.payload);
+      console.log(action.payload);
       let blogsByCat = jsonCopy(state.blogsByCat);
       let blogMainByCat = jsonCopy(state.blogMainByCat);
       let blogCountByCat = jsonCopy(state.blogCountByCat);
       if (blogsByCat[action.payload.cat]) {      
-        blogsByCat[action.payload.cat] = blogsByCat[action.payload.cat].concat(action.payload.data.data);
+        if(action.payload.page == 1){
+          
+          blogsByCat[action.payload.cat] = action.payload.data.data;
+          blogMainByCat[action.payload.cat] = action.payload.data.main;
+          blogCountByCat[action.payload.cat] = action.payload.data.count;
+        } else{        
+          blogsByCat[action.payload.cat] = blogsByCat[action.payload.cat].concat(action.payload.data.data);
+        }
+
       } else {      
         blogsByCat[action.payload.cat] = action.payload.data.data;
         blogMainByCat[action.payload.cat] = action.payload.data.main;

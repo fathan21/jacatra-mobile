@@ -77,7 +77,7 @@ export const RenderKeywordBlog = ({items})=>{
 export const RenderRelatedBlog = ({items,goToPage })=>{
     return (   
       <ScrollView style={{paddingVertical:5, marginHorizontal:10}}>
-        <Text style={{color:theme.CARD_TEXT_COLOR,fontWeight:'bold',fontSize:18,textTransform:'uppercase',borderBottomColor:'#5C171A', borderBottomWidth:3,width:100}}>
+        <Text style={{color:theme.CARD_TEXT_COLOR,fontWeight:'bold',fontSize:18,textTransform:'uppercase',borderBottomColor:theme.PRIMARY_COLOR, borderBottomWidth:3,width:100}}>
           Terkait
         </Text> 
         {

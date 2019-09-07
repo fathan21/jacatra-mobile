@@ -48,8 +48,12 @@ export class HomeScreen extends React.Component {
       this.setState({hideHeader:hd});
     }
 
-    __onRefresh = ()=> {
-      this._getDatas();
+    _onRefresh = ()=> {
+      let filter = this.state.filter;
+      filter.page = 1;
+      this.setState({filter:filter},()=>{
+        this.props.fetchBlogs(filter);
+      });
     }
     _toast = (msg) => {
       this.toast.show(msg, 3000, () => {

@@ -39,8 +39,9 @@ export class CategoryScreen extends React.Component {
       const { params } = this.props.navigation.state;
       const filter = this.state.filter;
             filter.cat = params.id;
+      console.log(filter, 'will mount');
       this.setState({filter:filter},()=>{
-        if(this.props.blogs.length <=0) {
+        if(this.props.blogs.length <=0 || filter.cat == 'bookmark') {
           this.props.fetchBlogsCat(filter);
         }
       });
@@ -53,7 +54,7 @@ export class CategoryScreen extends React.Component {
               filter.cat = params.id;
               filter.page = 1;
         this.setState({hasMore:true},()=>{
-            if (this.props.blogs.length <=0) {        
+            if (this.props.blogs.length <=0  || filter.cat == 'bookmark') {        
               this.setState({filter:filter},this.props.fetchBlogsCat(filter));
             }
         });
@@ -61,8 +62,12 @@ export class CategoryScreen extends React.Component {
       }
     }
 
-    __onRefresh = ()=> {
-      this._getDatas();
+    _onRefresh = ()=> {
+      let filter = this.state.filter;
+      filter.page = 1;
+      this.setState({filter:filter},()=>{
+        this.props.fetchBlogsCat(filter);
+      });
     }
     _toast = (msg) => {
       this.toast.show(msg, 3000, () => {
@@ -87,9 +92,11 @@ export class CategoryScreen extends React.Component {
       });
     };
     _goToPage = (item) => {
-        // console.warn(item);
         if(!item.id){
           return;
+        }
+        if(item.link === undefined) {
+          item.link = item.posts_id+'-'+item.title;
         }
         this.props.navigation.push('Page', {
             itemId: item.link,

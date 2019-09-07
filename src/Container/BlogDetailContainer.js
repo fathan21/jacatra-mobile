@@ -4,7 +4,7 @@ import {
     Layout
 } from 'react-native-ui-kitten';
 import HTML from 'react-native-render-html';
-import {toDate} from '../Redux/helper';
+import {toDate, _storeLocalData, _getLocalData} from '../Redux/helper';
 import AutoHeightImage from 'react-native-auto-height-image';
 import ImageView from 'react-native-image-view';
 import SwiperFlatList from 'react-native-swiper-flatlist';
@@ -18,7 +18,17 @@ const widthWindow = Dimensions.get('window').width;
 export  class BlogDetailContainer extends React.Component {
   state = {
     isImageViewVisible: false,
-    imageIndex:0
+    imageIndex:0,
+    
+    titelFontSize:20,
+    contentFontSize:16,
+    subContentFontsize:13,
+    fontSizeMenu:[
+      {title:'Kecil', fontSize:{title:18,cont:14, sub:11} },
+      {title:'Sedang', fontSize:{title:20,cont:16, sub:13} },
+      {title:'Besar', fontSize:{title:22,cont:20, sub:15} },
+      {title:'Sangat Besar', fontSize:{title:25,cont:20, sub:16} },
+    ]
   };
   constructor(props) {
     super(props);
@@ -28,8 +38,44 @@ export  class BlogDetailContainer extends React.Component {
   };
   
   componentWillMount(){
+    _getLocalData('_fontSizeType').then((e)=>{
+      if(e!==null) {
+        let fontSizeType = parseFloat(e);
+        let d = this.state.fontSizeMenu.filter((val,idx)=>{
+          return idx == fontSizeType
+        });
+        
+        if(d.length > 0){
+            this.setState({
+              titelFontSize:d[0].fontSize.title,
+              contentFontSize:d[0].fontSize.cont,
+              subContentFontsize:d[0].fontSize.sub,
+            },()=>{
+
+            });
+        }
+      }
+    })
   }
   componentWillUnmount(){
+  }
+  componentWillReceiveProps(prevProps){
+    if(prevProps.fontSizeType !== undefined){
+      let d = this.state.fontSizeMenu.filter((val,idx)=>{
+        return idx == prevProps.fontSizeType
+      });
+      if(d.length > 0){
+        _storeLocalData('_fontSizeType',prevProps.fontSizeType).then((e)=>{
+          this.setState({
+            titelFontSize:d[0].fontSize.title,
+            contentFontSize:d[0].fontSize.cont,
+            subContentFontsize:d[0].fontSize.sub,
+          },()=>{
+
+          });
+        })
+      }
+    }
   }
   _replaceAll =(content,search, replacement) => {
     return content.split(search).join(replacement);
@@ -37,7 +83,7 @@ export  class BlogDetailContainer extends React.Component {
   
   _renderImage = (data,i=0) =>{
     return (
-      <View key={i}>
+      <View key={i} >
         <TouchableOpacity key={data.title} onPress={()=> {
             this.setState({
                 imageIndex: i,
@@ -45,9 +91,13 @@ export  class BlogDetailContainer extends React.Component {
               });
             }}
             >
-            <AutoHeightImage width={Dimensions.get('window').width} source={{uri: data.img}} />
+            <View style={{minHeight:Dimensions.get('window').width /2,backgroundColor:'#e1e4e8'}}>
+              <AutoHeightImage width={Dimensions.get('window').width} source={{uri: data.img}} 
+              />
+            </View>
         </TouchableOpacity>
-        <Text style={{marginHorizontal:10, color:'#767676', fontSize:11}}>
+
+        <Text style={{marginHorizontal:10, color:'#767676', fontSize:this.state.subContentFontsize}}>
             {data.photographer}
         </Text>
     </View>
@@ -57,7 +107,7 @@ export  class BlogDetailContainer extends React.Component {
     return (
       <View key={0} style={{
         borderBottomWidth:0,
-        paddingBottom:25
+        paddingBottom:0
       }}>
         <SwiperFlatList
           autoplayDelay={5}
@@ -113,6 +163,13 @@ export  class BlogDetailContainer extends React.Component {
       realted,
       goToPage,
       } = this.props;
+    let {
+      titelFontSize,
+      contentFontSize,
+      subContentFontsize
+    } = this.state;
+
+
     let content = '';
     let media = [];
     if(data.content){
@@ -153,7 +210,7 @@ export  class BlogDetailContainer extends React.Component {
 
 
     return (
-      <Layout style={{paddingBottom:50, backgroundColor:theme.CARD_TEXT_BG,minHeight:heightWindow}}>
+      <Layout style={{paddingBottom:10, backgroundColor:theme.CARD_TEXT_BG,minHeight:heightWindow}}>
         <ScrollView 
           refreshControl={
               <RefreshControl
@@ -169,10 +226,10 @@ export  class BlogDetailContainer extends React.Component {
           >
             <ScrollView  style={{ flex: 1, marginHorizontal:0, marginTop:0,paddingBottom:10 }}>        
               <View style={{marginVertical:10,marginHorizontal:10}}>
-                <Text style={{fontSize:20,fontWeight:'bold', marginBottom:10,color:theme.CARD_TEXT_COLOR, letterSpacing:1.5, textAlign:'justify'}}>
+                <Text style={{fontSize:titelFontSize,fontWeight:'bold', marginBottom:10,color:theme.CARD_TEXT_COLOR, letterSpacing:1.5, textAlign:'justify'}}>
                   {data.title}
                 </Text>
-                <Text style={{fontSize:11,color:'#767676', textTransform:'capitalize'}}>
+                <Text style={{fontSize:subContentFontsize,color:'#767676', textTransform:'capitalize'}}>
                   {data.writer}
                   {'\n'}
                   jacatra.net - {toDate(data.date)}
@@ -182,12 +239,14 @@ export  class BlogDetailContainer extends React.Component {
                 data.title?
                 media:null
               }
-              <View style={{marginHorizontal:10, minHeight:heightWindow, marginVertical:20}}>
+              <View style={{marginHorizontal:10, marginTop:10}}>
                 {
                   content?
                   <HTML html={content}
                     {...DEFAULT_PROPS}
-                    tagsStyles={{p:{padding:0,margin:2,marginBottom:10,fontSize:14,color:'black',letterSpacing:1,textAlign:'justify', color: theme.CARD_TEXT_COLOR,}}
+                    tagsStyles={{p:{padding:0,margin:2,marginBottom:10,color:'black',letterSpacing:1,textAlign:'justify', color: theme.CARD_TEXT_COLOR,
+                        fontSize:contentFontSize
+                      }}
                     }
                   />:null
                 }
@@ -199,6 +258,7 @@ export  class BlogDetailContainer extends React.Component {
             {
               realted.length >0 ?<RenderRelatedBlog items={realted} goToPage={goToPage} />:null
             }
+            
             
         </ScrollView>
         {

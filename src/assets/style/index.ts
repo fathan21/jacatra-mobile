@@ -56,10 +56,11 @@ export const globalStyle = StyleSheet.create({
         marginVertical:10
     },
     btnHeader: {
-        width:40,height:40, 
+        width:30,height:30, 
         backgroundColor:theme.PRIMARY_HEADER_BG, 
         color:theme.PRIMARY_TEXT_COLOR,
         padding:0,
+        margin:0,
         display:'flex', alignItems:'center',justifyContent:'center', borderWidth:0
     },
     logo: {

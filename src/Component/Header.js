@@ -17,10 +17,10 @@ import {
 import {GeneralStatusBarColor} from './GeneralStatusBarColor';
 import {
     SearchIconOutlineWhite,
-    MenuIconWhite,IconApp
+    MenuIconWhite
 } from '@src/assets/icons';
 import theme, {globalStyle} from '../assets/style';
-import {logo, icon} from '../assets/images';
+import {logo} from '../assets/images';
 
 
 export class Header extends React.Component {
@@ -54,13 +54,13 @@ export class Header extends React.Component {
             
             <Button
               style={globalStyle.btnHeader}
-              size='large'
+              size='small'
               icon={SearchIconOutlineWhite}
               onPress={()=>this.props.navigation.push('Search')}
             />
             <Button
               style={globalStyle.btnHeader}
-              size='large'
+              size='small'
               icon={MenuIconWhite}
               onPress={this.openDrawer}
             />

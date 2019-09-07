@@ -10,40 +10,30 @@ import {
 } from './icon.component';
 
 
-export const Close = (style: StyleProp<ImageStyle>): IconElement => {
+export const Star = (style: StyleProp<ImageStyle>): IconElement => {
   const source: IconSource = {
-    imageSource: require('./close-outline.png'),
-  };
-  return Icon(source, style);
-};
-export const BookmarkShapeWhite = (style: StyleProp<ImageStyle>): IconElement => {
-  const source: IconSource = {
-    imageSource: require('./bookmark-shape-black.png'),
+    imageSource: require('./star.png'),
   };
   return Icon(source, style);
 };
 
-export const BookmarkShapeBlack = (style: StyleProp<ImageStyle>): IconElement => {
+export const StarOutline = (style: StyleProp<ImageStyle>): IconElement => {
   const source: IconSource = {
-    imageSource: require('./icons8-bookmark-50.png'),
+    imageSource: require('./star-outline.png'),
   };
   return Icon(source, style);
 };
-export const BookmarkShape = (style: StyleProp<ImageStyle>): IconElement => {
+
+export const Alphabet = (style: StyleProp<ImageStyle>): IconElement => {
   const source: IconSource = {
-    imageSource: require('./bookmark-shape-black.png'),
+    imageSource: require('./alphabet.png'),
   };
   return Icon(source, style);
 };
-export const SearchIconOutline = (style: StyleProp<ImageStyle>): IconElement => {
+
+export const Close = (style: StyleProp<ImageStyle>): IconElement => {
   const source: IconSource = {
-    imageSource: require('./search-outline.png'),
-  };
-  return Icon(source, style);
-};
-export const SearchIconOutlineWhite = (style: StyleProp<ImageStyle>): IconElement => {
-  const source: IconSource = {
-    imageSource: require('./search-outline-white.png'),
+    imageSource: require('./close-outline.png'),
   };
   return Icon(source, style);
 };
@@ -54,28 +44,16 @@ export const ShareOutlineWhite = (style: StyleProp<ImageStyle>): IconElement => 
   };
   return Icon(source, style);
 };
-export const ShareOutline = (style: StyleProp<ImageStyle>): IconElement => {
-  const source: IconSource = {
-    imageSource: require('./share-outline.png'),
-  };
-  return Icon(source, style);
-};
 
-export const MenuIconDark = (style: StyleProp<ImageStyle>): IconElement => {
+export const SearchIconOutlineWhite = (style: StyleProp<ImageStyle>): IconElement => {
   const source: IconSource = {
-    imageSource: require('./icon-menu-dark.png'),
+    imageSource: require('./search-outline-white.png'),
   };
   return Icon(source, style);
 };
 export const MenuIconWhite = (style: StyleProp<ImageStyle>): IconElement => {
   const source: IconSource = {
     imageSource: require('./icon-menu.png'),
-  };
-  return Icon(source, style);
-};
-export const ArrowIosBackFill = (style: StyleProp<ImageStyle>): IconElement => {
-  const source: IconSource = {
-    imageSource: require('./arrow-ios-back.png'),
   };
   return Icon(source, style);
 };
@@ -93,13 +71,6 @@ export const ArrowPointToTopWhite = (style: StyleProp<ImageStyle>): IconElement 
   };
   return Icon(source, style);
 };
-export const IconApp = (style: StyleProp<ImageStyle>): IconElement => {
-  const source: IconSource = {
-    imageSource: require('./icon.png'),
-  };
-  return Icon(source, style);
-};
-
 
 export {
   Icon,
