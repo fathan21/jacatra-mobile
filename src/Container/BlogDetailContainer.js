@@ -11,7 +11,6 @@ import SwiperFlatList from 'react-native-swiper-flatlist';
 import { WebView } from "react-native-webview";
 
 import {RenderKeywordBlog, RenderRelatedBlog, } from '../Component/';
-import theme from "../assets/style";
 
 const heightWindow = Dimensions.get('window').height;
 const widthWindow = Dimensions.get('window').width;
@@ -161,7 +160,9 @@ export  class BlogDetailContainer extends React.Component {
       isRefreshing,
       onRefresh,
       realted,
+      navigation,
       goToPage,
+      theme
       } = this.props;
     let {
       titelFontSize,
@@ -206,11 +207,8 @@ export  class BlogDetailContainer extends React.Component {
     if(data.type == 'video'){
       media.push(this._renderVideo(data));
     }
-
-
-
     return (
-      <Layout style={{paddingBottom:10, backgroundColor:theme.CARD_TEXT_BG,minHeight:heightWindow}}>
+      <Layout style={{paddingBottom:10, backgroundColor:this.props.theme.CARD_TEXT_BG,minHeight:heightWindow, marginBottom:100}}>
         <ScrollView 
           refreshControl={
               <RefreshControl
@@ -226,14 +224,22 @@ export  class BlogDetailContainer extends React.Component {
           >
             <ScrollView  style={{ flex: 1, marginHorizontal:0, marginTop:0,paddingBottom:10 }}>        
               <View style={{marginVertical:10,marginHorizontal:10}}>
-                <Text style={{fontSize:titelFontSize,fontWeight:'bold', marginBottom:10,color:theme.CARD_TEXT_COLOR, letterSpacing:1.5, textAlign:'justify'}}>
+                <Text style={{fontSize:titelFontSize,fontWeight:'bold', marginBottom:10,color:this.props.theme.CARD_TEXT_COLOR, letterSpacing:1.5, textAlign:'justify'}}>
                   {data.title}
                 </Text>
-                <Text style={{fontSize:subContentFontsize,color:'#767676', textTransform:'capitalize'}}>
-                  {data.writer}
-                  {'\n'}
-                  jacatra.net - {toDate(data.date)}
-                </Text>
+                <TouchableOpacity onPress={(e)=>{
+                    navigation.push('Search',{
+                      val:data.writer,
+                      type: 'writer'
+                    })
+                  }
+                  }>
+                  <Text style={{fontSize:subContentFontsize,color:'#767676', textTransform:'capitalize'}}>
+                    {data.writer}
+                    {'\n'}
+                    jacatra.net - {toDate(data.date)}
+                  </Text>
+                </TouchableOpacity>
               </View>
               {
                 data.title?
@@ -244,7 +250,7 @@ export  class BlogDetailContainer extends React.Component {
                   content?
                   <HTML html={content}
                     {...DEFAULT_PROPS}
-                    tagsStyles={{p:{padding:0,margin:2,marginBottom:10,color:'black',letterSpacing:1,textAlign:'justify', color: theme.CARD_TEXT_COLOR,
+                    tagsStyles={{p:{padding:0,margin:2,marginBottom:10,color:'black',letterSpacing:1,textAlign:'justify', color: this.props.theme.CARD_TEXT_COLOR,
                         fontSize:contentFontSize
                       }}
                     }
@@ -253,10 +259,10 @@ export  class BlogDetailContainer extends React.Component {
               </View>
             </ScrollView>
             {
-              data.tags?<RenderKeywordBlog items={(data.tags).split(',')} />:null
+              data.tags?<RenderKeywordBlog items={(data.tags).split(',')} navigation={navigation} theme={theme}  />:null
             }
             {
-              realted.length >0 ?<RenderRelatedBlog items={realted} goToPage={goToPage} />:null
+              realted.length >0 ?<RenderRelatedBlog items={realted} goToPage={goToPage} theme={theme}  />:null
             }
             
             

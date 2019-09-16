@@ -12,7 +12,7 @@ import {
   ArrowPointToTopWhite,
 } from '@src/assets/icons/';
 
-import theme  from '../assets/style';
+// import theme  from '../assets/style';
 
 import {ArticleCard1, ArticleCard2, ArticleCard3 } from '../Component/';
 
@@ -56,12 +56,13 @@ export class BlogListContainer extends React.Component {
         blogs,
         blogMain,
         type_card,
-        hideHeader
+        hideHeader,
+        theme
       } = this.props;
       return (
         <View style={{backgroundColor:theme.CARD_TEXT_BG,minHeight:heightWindow}}>
           <ScrollView
-            style={{backgroundColor:theme.CARD_TEXT_BG, marginBottom:20}}
+            style={{backgroundColor:theme.CARD_TEXT_BG, marginBottom:100}}
             ref={(c) => {this.scroll = c}}
             onScroll ={
               ({nativeEvent}) => {
@@ -103,9 +104,9 @@ export class BlogListContainer extends React.Component {
             <View>
               {
                   (blogLoading || blogError.global) && !blogMain.title?
-                  <ArticleCard1 goToPage={()=>{}} data={{}}  /> :
+                  <ArticleCard1 goToPage={()=>{}} data={{}}  theme={theme}  /> :
                     blogMain.title?
-                    <ArticleCard1 goToPage={()=>{goToPage(blogMain)}} data={blogMain}  />
+                    <ArticleCard1 goToPage={()=>{goToPage(blogMain)}} data={blogMain}  theme={theme}  />
                     : 
                     blogs.length <= 0?<Text style={{fontSize:18, textAlign:'center', paddingTop:50}}>Data belum tersedia</Text>:null
               }
@@ -115,10 +116,10 @@ export class BlogListContainer extends React.Component {
                   blogs.map((blog, i) => {
                   return (
                     type_card == '1'? 
-                      <ArticleCard2 goToPage={goToPage} key={i}  data={blog}   />: 
+                      <ArticleCard2 goToPage={goToPage} key={i}  data={blog} theme={theme}   />: 
                       type_card == '3'? 
-                      <ArticleCard3 goToPage={goToPage} key={i}  data={blog}   /> :
-                      <ArticleCard2 goToPage={goToPage} key={i}  data={blog}   /> 
+                      <ArticleCard3 goToPage={goToPage} key={i}  data={blog} theme={theme}   /> :
+                      <ArticleCard2 goToPage={goToPage} key={i}  data={blog} theme={theme}   /> 
                     
                   );
                 })

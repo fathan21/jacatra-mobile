@@ -13,7 +13,8 @@ import {BlogDetailContainer} from '../Container';
 import theme from "../assets/style";
 const widthWindow = Dimensions.get('window').width;
 const heightWindow = Dimensions.get('window').height;
-export default class PageScreen extends React.Component {
+import { withTheme } from '../Redux/theme';
+export class PageScreen extends React.Component {
   static navigationOptions = {
       header: null
   };
@@ -196,7 +197,7 @@ export default class PageScreen extends React.Component {
   }
   render() {
     
-    const { navigation } = this.props;
+    const { navigation, theme } = this.props;
     const itemId = navigation.getParam('itemId', 'NO-ID');
 
     if (this.state.loading) {
@@ -205,8 +206,9 @@ export default class PageScreen extends React.Component {
           <HeaderBack navigation = {this.props.navigation} title={'title'} share={this._shareText} data={this.state.data}
               isBookmark={this.state.isBookmark}
               saveBookmark={this._saveBookmark}
+              theme={theme} 
           />
-          <RenderLoadingBlogDetail />
+          <RenderLoadingBlogDetail theme={theme}  />
         </View>
       );
     }
@@ -215,9 +217,10 @@ export default class PageScreen extends React.Component {
         <View style={{backgroundColor:theme.CARD_TEXT_BG,minHeight:heightWindow}}>
           <HeaderBack navigation = {this.props.navigation} title={'title'} share={this._shareText} data={this.state.data}
               isBookmark={this.state.isBookmark}
-              saveBookmark={this._saveBookmark}
+              saveBookmark={this._saveBookmark} 
+              theme={theme} 
           />
-          <RenderErrorBlog getDatas={()=>this._getData(itemId)} />
+          <RenderErrorBlog getDatas={()=>this._getData(itemId)} theme={theme}  />
         </View>
       );
     }
@@ -228,14 +231,17 @@ export default class PageScreen extends React.Component {
             isBookmark={this.state.isBookmark}
             saveBookmark={this._saveBookmark}
             fontSizeChange={this._fontSizeChange}
+            theme={theme} 
         />
         <BlogDetailContainer
           data={this.state.data}
           isRefreshing={this.state.isRefreshing}
           onRefresh={this._onRefresh}
+          navigation={this.props.navigation}
           realted={this.state.realted}
           goToPage={this._goToPage}
           fontSizeType={this.state.fontSizeType}
+          theme={theme} 
         />
         
         <Toast
@@ -245,3 +251,5 @@ export default class PageScreen extends React.Component {
     );
   }
 }
+
+export default PageSc = withTheme(PageScreen);

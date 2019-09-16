@@ -1,16 +1,16 @@
 import * as React from 'react';
 import {
-    View, ScrollView
+    View, ScrollView, TouchableOpacity
 } from 'react-native';
 
 
 import {Text, Button
 } from 'react-native-ui-kitten';
 import {ArticleCard2} from './ArticleCard2';
-import theme, { globalStyle } from '../assets/style';
+import { globalStyle } from '../assets/style';
 
 
-export const RenderErrorBlog = ({getDatas})=>{
+export const RenderErrorBlog = ({getDatas, theme})=>{
     return (
         <View style={{backgroundColor:theme.CARD_TEXT_BG}}>
             <View style={{textAlign:'center', marginVertical:50, marginHorizontal:16}}>
@@ -24,7 +24,7 @@ export const RenderErrorBlog = ({getDatas})=>{
         </View>
     )
 }
-export const RenderLoadingBlogDetail = ()=>{
+export const RenderLoadingBlogDetail = ({theme})=>{
     return (
       <View style={{backgroundColor:theme.CARD_TEXT_BG}}>
             <View style={{marginVertical:10,marginHorizontal:5, width:'90%', height:35,backgroundColor:'#e1e4e8'}}>
@@ -45,44 +45,54 @@ export const RenderLoadingBlogDetail = ()=>{
         </View>
     )
 }
-export const RenderKeywordBlog = ({items})=>{
+export const RenderKeywordBlog = ({items, navigation, theme})=>{
     return (
         <View style={{paddingVertical:5, marginHorizontal:10, marginVertical:20, display:'flex', flexDirection:'row', flexWrap:'wrap',
-         justifyContent:'flex-start'}}>
+         justifyContent:'flex-start'}}  > 
           {
             items.map((keyword, i) => {
-              return (<View 
-                  key={i}
-                   size={'small'}
-                   style={{
-                     borderColor:'#ebebeb',
-                     backgroundColor:'#ebebeb',
-                     marginRight:5, 
-                     paddingVertical:3,
-                     paddingHorizontal: 5,
-                     textTransform:'lowercase',
-                     color:'#CCC',
-                     borderWidth:2,
-                     marginBottom:5
-                   }}
-                  >
-                    <Text style={{color:'#747474'}}>{keyword}</Text>
-                  </View>);
+              return (
+              
+                <TouchableOpacity 
+                    key={i} onPress={(e)=>{
+                    navigation.push('Search',{
+                      val:keyword,
+                      type: 'tag'
+                    })
+                }} >
+                  <View 
+                    size={'small'}
+                    style={{
+                      borderColor:'#ebebeb',
+                      backgroundColor:'#ebebeb',
+                      marginRight:5, 
+                      paddingVertical:3,
+                      paddingHorizontal: 5,
+                      textTransform:'lowercase',
+                      color:'#CCC',
+                      borderWidth:2,
+                      marginBottom:5
+                    }}
+                    >
+                      <Text style={{color:'#747474'}}>{keyword}</Text>
+                    </View>
+                  </TouchableOpacity>
+                );
             })
           }
         </View>
     )
 }
 
-export const RenderRelatedBlog = ({items,goToPage })=>{
+export const RenderRelatedBlog = ({items,goToPage , theme})=>{
     return (   
       <ScrollView style={{paddingVertical:5, marginHorizontal:10}}>
-        <Text style={{color:theme.CARD_TEXT_COLOR,fontWeight:'bold',fontSize:18,textTransform:'uppercase',borderBottomColor:theme.PRIMARY_COLOR, borderBottomWidth:3,width:100}}>
+        <Text style={{color:theme.CARD_TEXT_COLOR,fontWeight:'bold',fontSize:18,textTransform:'uppercase',borderBottomColor:theme.PRIMARY_HEADER_BG, borderBottomWidth:3,width:100}}>
           Terkait
         </Text> 
         {
           items.map((blog, i) => {
-            return (<ArticleCard2 goToPage={goToPage} key={i}  data={blog}   />);
+            return (<ArticleCard2 goToPage={goToPage} key={i}  data={blog} theme={theme}   />);
           })
         }
       </ScrollView>

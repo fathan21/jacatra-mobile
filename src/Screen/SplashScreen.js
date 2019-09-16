@@ -2,9 +2,10 @@ import React from "react";
 import { View,ImageBackground } from "react-native";
 import {getAppSetting} from '../Redux/helper';
 
+import { withTheme } from '../Redux/theme';
+
 import {logo} from '../assets/images';
-import theme from "../assets/style";
-export default class SplashScreen extends React.Component {
+export class SplashScreen extends React.Component {
   performTimeConsumingTask = async() => {
     getAppSetting().then((e)=>{
       // return e;
@@ -47,7 +48,7 @@ export default class SplashScreen extends React.Component {
 */
   render() {
     return ( 
-    <View style={styles.viewStyles}>
+    <View style={[styles.viewStyles, {backgroundColor:this.props.theme.PRIMARY_COLOR}]}>
       <ImageBackground source={logo.imageSource} style={styles.bg}>
       </ImageBackground>
     </View>
@@ -59,10 +60,12 @@ const styles = {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: theme.PRIMARY_COLOR
   },
   bg: {
     width: 300,
     height: 100
   }
 }
+
+
+export default PageSc = withTheme(SplashScreen);

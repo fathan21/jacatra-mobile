@@ -1,7 +1,7 @@
 import React from "react";
-import { View,  ScrollView, ActivityIndicator, RefreshControl, Dimensions,Text } from "react-native";
+import { View, Image,  ScrollView, ActivityIndicator, RefreshControl, Dimensions, TouchableOpacity } from "react-native";
 import {
-    Layout, Button, TopNavigation, Input,
+    Layout, TopNavigation, Input,Text
 } from 'react-native-ui-kitten';
 
 import {
@@ -10,21 +10,23 @@ import {
 import {RenderErrorBlog, GeneralStatusBarColor} from '../Component';
 
 import {api} from '../Redux/Actions';
-import {
-  ArrowBackOutlineWhite,
-} from '@src/assets/icons';
-import theme from '../assets/style';
+import  {globalStyle} from '../assets/style';
+
+import {BackImg} from '../assets/images';
 
 import { ArticleCard2 } from '../Component/';
+import { withTheme } from '../Redux/theme';
 
 const widthWindow = Dimensions.get('window').width;
-export default class SarchScreen extends React.Component {
+const heightWindow = Dimensions.get('window').height;
+export class SarchScreen extends React.Component {
   state = {
     isRefreshing: false,
     loading: false,
     error: false, 
     submit: false,
     q:'',
+    type:'q',
     data: [],
     realted:[]
   } 
@@ -39,21 +41,30 @@ export default class SarchScreen extends React.Component {
   componentDidMount() {
     
     //console.warn(this.inputS);
-    let app = this;
-    setTimeout(function(){ app.inputS.current.focus();}, 1000);
   };
   
   componentWillMount(){
     this._isMounted = true;
     const { navigation } = this.props;
-    const itemId = navigation.getParam('itemId', 'NO-ID');
-    // 
-    
+    const type = navigation.getParam('type');
+    const val = navigation.getParam('val');
+    if (type !== undefined) {
+      this.setState({
+        type:type,
+        q: val
+      }, ()=>{this._getData()})
+    } else {
+      let app = this;
+      setTimeout(function(){ app.inputS.current.focus();}, 1000);
+    }
   }
   onInputValueChange = (q) => {
     this.setState({ q });
   };
   onSubmitEditing =(e) => {   
+    if (this.state.q == '' || this.state.q == null ){
+      return;
+    }
     this.setState({
       submit:true
     })
@@ -61,38 +72,37 @@ export default class SarchScreen extends React.Component {
   }
   
   renderLeftControl = () => {
+      const {theme} = this.props;
       return (
         
         <View style = {{display: 'flex',flexDirection: 'row', alignItems:'center'}} >
           
-          <Button
-            style={{
-                width:40,height:40, 
-                backgroundColor:theme.PRIMARY_COLOR, 
-                color:theme.PRIMARY_TEXT_COLOR,
-                padding:0,
-                display:'flex', alignItems:'center',justifyContent:'center', borderWidth:0
-            }}
-            size='large'
-            icon={ArrowBackOutlineWhite}
-            onPress={()=>this.props.navigation.goBack()}
-            // onPress={()=>this.inputS.current.focus()}
-          />
           
-          <Input
-            ref={this.inputS}
-            value={this.state.q}
-            onChangeText={this.onInputValueChange}
-            size={'small'}
-            placeholder="cari.."
-            onSubmitEditing={this.onSubmitEditing}
-            style={{width:widthWindow-80, padding:0, fontSize:13}}
-            textStyle={{padding:0,margin:0}}
-          />
+            <TouchableOpacity 
+              onPress={()=>this.props.navigation.goBack()}
+            >
+              <Image
+                  style={globalStyle.btnImgHeader}
+                  source={BackImg.imageSource}
+              />
+            </TouchableOpacity>
+          {
+            this.state.type == 'q'?  
+            <Input
+              ref={this.inputS}
+              value={this.state.q}
+              onChangeText={this.onInputValueChange}
+              size={'small'}
+              placeholder="cari.."
+              onSubmitEditing={this.onSubmitEditing}
+              style={{width:widthWindow-80, padding:0, fontSize:13}}
+              textStyle={{padding:0,margin:0}}
+            />: <Text style={{color:theme.PRIMARY_TEXT_COLOR, fontSize:20, textTransform:'capitalize'}}>{this.state.q}</Text>
+          }
         </View>
       );
   }
-  renderRightControls = () => {
+  renderRightControls = () => {  
       return (
         <View style = {{display: 'flex',flexDirection: 'row'}} >
          
@@ -123,10 +133,18 @@ export default class SarchScreen extends React.Component {
   }
   _getData = () => {
     let params = {
-      q: this.state.q,
       page:1,
-      limit: 50
+      limit: 50,
+      q:''
     };
+    if (this.state.type == 'tag'){
+        params.tag = this.state.q;
+    }else if (this.state.type == 'writer'){
+      params.writer = this.state.q;
+    }
+    else {
+      params.q = this.state.q;
+    } 
     this.setState({loading:true},()=>{
       api.post('news',{filter:params}).then((res) => {
         if(!this._isMounted){
@@ -152,18 +170,16 @@ export default class SarchScreen extends React.Component {
   
   render() {
     
-    const { navigation } = this.props;
-    const itemId = navigation.getParam('itemId', 'NO-ID');
-
+    const { navigation, theme } = this.props;
 
     return (
-      <Layout style={{paddingBottom:50}}>
+      <Layout style={{paddingBottom:50, backgroundColor:theme.CARD_TEXT_BG, minHeight:heightWindow}}>
         
         <GeneralStatusBarColor backgroundColor={theme.PRIMARY_COLOR}
                   barStyle="light-content"/>
         <SafeAreaViewReactNavigation >
           <TopNavigation alignment = 'start'
-              style={{backgroundColor:theme.PRIMARY_COLOR, marginBottom:10, color:theme.PRIMARY_TEXT_COLOR}}
+              style={{backgroundColor:theme.PRIMARY_HEADER_BG, marginBottom:10, color:theme.PRIMARY_TEXT_COLOR}}
               leftControl={this.renderLeftControl()}
               rightControls = {
                 this.renderRightControls()
@@ -171,6 +187,7 @@ export default class SarchScreen extends React.Component {
               />
         </SafeAreaViewReactNavigation>
         <ScrollView 
+          style={{backgroundColor:theme.CARD_TEXT_BG}}
           refreshControl={
               <RefreshControl
                 refreshing={this.state.isRefreshing}
@@ -189,16 +206,16 @@ export default class SarchScreen extends React.Component {
             }
             {
               this.state.error? 
-              <RenderErrorBlog getDatas={this._getData} />: null
+              <RenderErrorBlog getDatas={this._getData} theme={theme} />: null
             }
             <ScrollView>
               {
                 !this.state.loading && !this.state.error?
                 this.state.data.length == 0 && this.state.submit? 
-                  <Text style={{marginVertical:50, textAlign:'center'}}>Data tidak ditemukan</Text>:
+                  <Text style={{marginVertical:50, textAlign:'center', color:theme.CARD_TEXT_COLOR}}>Data tidak ditemukan</Text>:
                   this.state.data.map((blog, i) => {
                     return (
-                      <ArticleCard2 goToPage={this._goToPage} key={i}  data={blog}   />
+                      <ArticleCard2 goToPage={this._goToPage} key={i}  data={blog} theme={theme}   />
                     );
                   })
                 :null
@@ -211,3 +228,5 @@ export default class SarchScreen extends React.Component {
     );
   }
 }
+
+export default PageSc = withTheme(SarchScreen);

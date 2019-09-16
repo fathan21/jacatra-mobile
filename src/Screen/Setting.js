@@ -11,7 +11,9 @@ import {
 import {
   Close
 } from '@src/assets/icons';
-import theme, {globalStyle} from '../assets/style';
+import { withTheme } from '../Redux/theme';
+
+import {globalStyle} from '../assets/style';
 import {logo} from '../assets/images';
 
 import {getAppSetting} from '../Redux/helper';
@@ -30,7 +32,7 @@ const deviceId = DeviceInfo.getDeviceId();
 const APP_STORE_LINK = 'itms://itunes.apple.com/us/app/apple-store/myiosappid?mt=8';
 const PLAY_STORE_LINK = 'market://details?id=myandroidappid';
 
-export default class SettingScreen extends React.Component {
+export class SettingScreen extends React.Component {
   state = {
     modalVisible: false,
     falseSwitchIsOn: false
@@ -41,7 +43,11 @@ export default class SettingScreen extends React.Component {
     this._emailBantuan = this._emailBantuan.bind(this);
   }
   async componentDidMount() {
-    
+    _getLocalData('_theme').then((e)=>{
+        if (e === 'dark') {
+          this.setState({falseSwitchIsOn:true})   
+        }
+    })
   }
   async _emailBantuan(){
     let text = `SIGNATURE \r\n ${deviceId} \r\n  ${systemName} ${baseOS} \r\n ${name} ${version}`;
@@ -81,14 +87,15 @@ export default class SettingScreen extends React.Component {
     )
   }
   _renderAbuot = () =>{
+    const {theme} = this.props;
     return (
       
       <View style={styles.container}>
         <Layout
           level='3'
-          style={styles.modalContainer}>
+          style={[styles.modalContainer,{backgroundColor:theme.PRIMARY_HEADER_BG}]}>
           <View style={{width:'100%', height:100, 
-            backgroundColor:theme.PRIMARY_COLOR,borderRadius:10,
+            backgroundColor:theme.PRIMARY_HEADER_BG,borderRadius:10,
             display:'flex',justifyContent:'center', alignItems:'center', marginBottom:10}}>
             <Image
                 style={globalStyle.logo}
@@ -109,11 +116,33 @@ export default class SettingScreen extends React.Component {
       </View>
     )
   }
+  toggleSwitch = (value) => {
+    //onValueChange of the switch this function will be called
+    this.setState({falseSwitchIsOn: value},()=>{
+      if(!value){
+        _storeLocalData('_theme','light').then(()=>{
+          RNRestart.Restart();
+          //this.props.setTheme('light');
+        });
+      }else{
+        _storeLocalData('_theme','dark').then(()=>{
+          RNRestart.Restart();
+          //this.props.setTheme('dark');
+
+          // RNRestart.Restart();
+        });
+
+      }
+    })
+    //state changes according to switch
+    //which will result in re-render the text
+  }
 
   render() {
+    const {theme} = this.props;
     return ( 
-    <View style={styles.viewStyles}>
-      <HeaderBack navigation = {this.props.navigation} title={'title'}
+    <View style={[styles.viewStyles,{minHeight:heightWindow,backgroundColor:theme.CARD_TEXT_BG, color:theme.CARD_TEXT_COLOR}]}>
+      <HeaderBack navigation = {this.props.navigation} title={'title'} theme={theme}
           />
           <Modal visible={this.state.modalVisible} animationType="slide"
             transparent={true}
@@ -123,9 +152,31 @@ export default class SettingScreen extends React.Component {
             {this._renderAbuot()}
           </Modal>
       
+      
       <View style={{margin:10}}>
-        <View style={{borderBottomColor:theme.PRIMARY_COLOR,borderBottomWidth:2, marginBottom:10,paddingBottom:5}}>
-          <Text style={{fontSize:18,fontWeight:'bold'}}>SARAN</Text>
+        <View style={{borderBottomColor:theme.PRIMARY_HEADER_BG,borderBottomWidth:2, marginBottom:10,paddingBottom:5}}>
+          <Text style={{fontSize:18,fontWeight:'bold', color:theme.CARD_TEXT_COLOR}}>PENGATURAN</Text>
+        </View>
+        
+        <TouchableOpacity
+            activeOpacity={0.9}
+            >
+          <View style={{marginBottom:5,paddingBottom:5, display:'flex', justifyContent:'space-between', 
+            flexDirection:'row'}}>
+            <Text style={{fontSize:16,color:theme.CARD_TEXT_COLOR}}>Tema Malam</Text>
+            <Switch
+              trackColor={'#ccccccc'}
+              //tintColor={'red'}
+              thumbColor={theme.PRIMARY_HEADER_BG}
+              onValueChange = {this.toggleSwitch}
+              value = {this.state.falseSwitchIsOn}/>
+          </View>
+        </TouchableOpacity>
+      </View>
+
+      <View style={{margin:10}}>
+        <View style={{borderBottomColor:theme.PRIMARY_HEADER_BG,borderBottomWidth:2, marginBottom:10,paddingBottom:5}}>
+          <Text style={{fontSize:18,fontWeight:'bold', color:theme.CARD_TEXT_COLOR}}>SARAN</Text>
         </View>
         
         <TouchableOpacity
@@ -133,7 +184,7 @@ export default class SettingScreen extends React.Component {
             onPress={()=>this._emailBantuan()}
             >
           <View style={{marginBottom:5,paddingBottom:5}}>
-            <Text style={{fontSize:16,}}>Email Bantuan</Text>
+            <Text style={{fontSize:16,color:theme.CARD_TEXT_COLOR}}>Email Bantuan</Text>
           </View>
         </TouchableOpacity>
         
@@ -142,7 +193,7 @@ export default class SettingScreen extends React.Component {
             onPress={()=>this._ulas()}
             >
           <View style={{marginBottom:5,paddingBottom:5}}>
-            <Text style={{fontSize:16,}}>Ulas aplikasi ini</Text>
+            <Text style={{fontSize:16,color:theme.CARD_TEXT_COLOR}}>Ulas aplikasi ini</Text>
           </View>
         </TouchableOpacity>
         
@@ -151,7 +202,7 @@ export default class SettingScreen extends React.Component {
             onPress={()=>this._share()}
             >
           <View style={{marginBottom:5,paddingBottom:5}}>
-            <Text style={{fontSize:16,}}>Share aplikasi ini</Text>
+            <Text style={{fontSize:16,color:theme.CARD_TEXT_COLOR}}>Share aplikasi ini</Text>
           </View>
         </TouchableOpacity>
         
@@ -160,7 +211,7 @@ export default class SettingScreen extends React.Component {
             onPress={()=>this.setState({modalVisible:true})}
             >
           <View style={{marginBottom:5,paddingBottom:5}}>
-            <Text style={{fontSize:16,}}>Tentang aplikasi ini</Text>
+            <Text style={{fontSize:16,color:theme.CARD_TEXT_COLOR}}>Tentang aplikasi ini</Text>
           </View>
         </TouchableOpacity>
       </View>
@@ -183,7 +234,6 @@ const styles = StyleSheet.create({
     overflow:'hidden',
     zIndex:9999,
     borderRadius:10,
-    backgroundColor:theme.PRIMARY_COLOR,
   },
   overlay: {
     flex: 1,
@@ -195,3 +245,5 @@ const styles = StyleSheet.create({
     width: widthWindow,
   }
 });
+
+export default PageSc = withTheme(SettingScreen);

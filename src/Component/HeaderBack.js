@@ -8,23 +8,14 @@ import {
 
 import {GeneralStatusBarColor} from './GeneralStatusBarColor';
 import {
-    Button,
-} from 'react-native-ui-kitten';
-import {
     TopNavigation,Popover
 } from 'react-native-ui-kitten';
 import {
     SafeAreaView as SafeAreaViewReactNavigation,
 } from 'react-navigation';
-import {
-    ArrowBackOutlineWhite,
-    Star,
-    StarOutline,
-    Alphabet,
-    ShareOutlineWhite
-} from '@src/assets/icons';
-import theme, {globalStyle} from '../assets/style';
-import {logo} from '../assets/images';
+
+import  {globalStyle} from '../assets/style';
+import {logo, BackImg, StartOutlineImg, StartImg, AlphabetImg, ShareImg} from '../assets/images';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
 
@@ -81,13 +72,14 @@ export class HeaderBack extends React.Component {
           
           <View style = {{display: 'flex',flexDirection: 'row', alignItems:'center'}} >
             
-            <Button
-            
-            style={globalStyle.btnHeader}
-            size='small'
-              icon={ArrowBackOutlineWhite}
+            <TouchableOpacity 
               onPress={()=>this.props.navigation.goBack()}
-            />
+            >
+              <Image
+                  style={globalStyle.btnImgHeader}
+                  source={BackImg.imageSource}
+              />
+            </TouchableOpacity>
             <Image
               style={globalStyle.logo}
               source={logo.imageSource}
@@ -104,31 +96,38 @@ export class HeaderBack extends React.Component {
             visible={this.state.popoverVisible}
             content={this.renderPopover()}
             onBackdropPress={(e)=>{this.setState({popoverVisible:false})}}>
-              <Button
-                style={globalStyle.btnHeader}
-                size='small'
-                icon={Alphabet}
-                onPress={()=>{ this.setState({popoverVisible:true}) }}
-              />
+              
+              <TouchableOpacity 
+                onPress={()=>this.setState({popoverVisible:true})}
+              >
+                <Image
+                    style={globalStyle.btnImgHeader}
+                    source={AlphabetImg.imageSource}
+                />
+              </TouchableOpacity>
             </Popover>
-            <Button
-              style={globalStyle.btnHeader}
-              size='small'
-              icon={ShareOutlineWhite}
+            <TouchableOpacity 
               onPress={()=>this.props.share()}
-            />
+            >
+              <Image
+                  style={globalStyle.btnImgHeader}
+                  source={ShareImg.imageSource}
+              />
+            </TouchableOpacity>
             
-            <Button
-              style={globalStyle.btnHeader}
-              size='small'
-              icon={this.props.isBookmark?Star:StarOutline}
+            <TouchableOpacity 
               onPress={()=>this.props.saveBookmark(this.props.data)}
-            />
+            >
+              <Image
+                  style={globalStyle.btnImgHeader}
+                  source={this.props.isBookmark?StartImg.imageSource:StartOutlineImg.imageSource}
+              />
+            </TouchableOpacity>
           </View>
       );
     }
     render() {
-      const {data} = this.props;
+      const {data, theme} = this.props;
      // let isB = data.id? IsBoomark(data.id):null;
       // console.warn(isB);    
         return (

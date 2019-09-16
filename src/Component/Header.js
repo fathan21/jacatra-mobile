@@ -3,11 +3,7 @@ import {
     StyleSheet,
     View,
     Image,
-    Text
 } from 'react-native';
-import {
-    Button,
-} from 'react-native-ui-kitten';
 import {
     TopNavigation,
 } from 'react-native-ui-kitten';
@@ -15,12 +11,10 @@ import {
     SafeAreaView as SafeAreaViewReactNavigation,
 } from 'react-navigation';
 import {GeneralStatusBarColor} from './GeneralStatusBarColor';
-import {
-    SearchIconOutlineWhite,
-    MenuIconWhite
-} from '@src/assets/icons';
-import theme, {globalStyle} from '../assets/style';
-import {logo} from '../assets/images';
+
+import {globalStyle} from '../assets/style';
+import {logo, SearchImg, MenuImg} from '../assets/images';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 
 export class Header extends React.Component {
@@ -52,22 +46,27 @@ export class Header extends React.Component {
         return (
           <View style = {{display: 'flex',flexDirection: 'row'}} >
             
-            <Button
-              style={globalStyle.btnHeader}
-              size='small'
-              icon={SearchIconOutlineWhite}
+            <TouchableOpacity 
               onPress={()=>this.props.navigation.push('Search')}
-            />
-            <Button
-              style={globalStyle.btnHeader}
-              size='small'
-              icon={MenuIconWhite}
-              onPress={this.openDrawer}
-            />
+            >
+              <Image
+                  style={globalStyle.btnImgHeader}
+                  source={SearchImg.imageSource}
+              />
+            </TouchableOpacity>
+            <TouchableOpacity 
+              onPress={()=>this.openDrawer()}
+            >
+              <Image
+                  style={globalStyle.btnImgHeader}
+                  source={MenuImg.imageSource}
+              />
+            </TouchableOpacity>
           </View>
       );
     }
     render() {
+      const {theme} = this.props;
         return (
               <SafeAreaViewReactNavigation >
                 

@@ -2,11 +2,10 @@ import * as React from 'react';
 
 import { connect } from 'react-redux';
 import {
-    ScrollView,
     View,
-    RefreshControl,
-    Text,
 } from 'react-native';
+
+import { withTheme } from '../Redux/theme';
 import {
     Layout,
 } from 'react-native-ui-kitten';
@@ -39,7 +38,6 @@ export class CategoryScreen extends React.Component {
       const { params } = this.props.navigation.state;
       const filter = this.state.filter;
             filter.cat = params.id;
-      console.log(filter, 'will mount');
       this.setState({filter:filter},()=>{
         if(this.props.blogs.length <=0 || filter.cat == 'bookmark') {
           this.props.fetchBlogsCat(filter);
@@ -113,18 +111,18 @@ export class CategoryScreen extends React.Component {
     
     render() {
       const { params } = this.props.navigation.state;
-      
+      const {theme} = this.props;
       if (this.props.blogError.global){
         return(
           <View>
-            <Header navigation = {this.props.navigation} title={params.title} />
+            <Header navigation = {this.props.navigation} title={params.title} theme={theme} />
             <RenderErrorBlog getDatas={this._getDatas} />
           </View>
         );
       }
       return (
         <Layout style={{paddingBottom:40}}>
-            <Header navigation = {this.props.navigation} title={params.title} />
+            <Header navigation = {this.props.navigation} title={params.title} theme={theme} />
             <BlogListContainer 
               hasMore={this.state.hasMore}
               isRefreshing={this.state.isRefreshing}
@@ -138,6 +136,7 @@ export class CategoryScreen extends React.Component {
               blogError={this.props.blogError}
               blogs={this.props.blogs}
               blogMain={this.props.blogMain}
+              theme={this.props.theme}
             />
             <Toast
                 opacity={0.5}
@@ -156,4 +155,6 @@ function mapStateToProps(state, props) {
       blogLoading: state.BlogStore.blogLoading,
   }
 }
-export default connect(mapStateToProps, {fetchBlogs, fetchBlogsCat})(CategoryScreen);
+
+const Homesc = withTheme(CategoryScreen);
+export default connect(mapStateToProps, {fetchBlogs, fetchBlogsCat})(Homesc);

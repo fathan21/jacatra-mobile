@@ -11,13 +11,11 @@ import {
 } from 'react-native-ui-kitten';
 import Toast from 'react-native-easy-toast';
 
-const widthWindow = Dimensions.get('window').width;
 import {Header, RenderErrorBlog } from '../Component/';
 import {BlogListContainer } from '../Container';
 
 import {fetchBlogs, fetchHeadline, fetchPopuler} from '../Redux/Actions/Blog-actions';
-import theme from '../assets/style';
-
+import { withTheme } from '../Redux/theme';
 
 export class HomeScreen extends React.Component {
     state = {
@@ -111,11 +109,12 @@ export class HomeScreen extends React.Component {
       return index === this.state.selectedIndexTab;
     };
     render() {
+      const {theme} =  this.props;
       if (this.props.blogError.global){
         return(
           <View>
-            <Header navigation = {this.props.navigation} title={'Home'} />
-            <RenderErrorBlog getDatas={this._getDatas} />
+            <Header navigation = {this.props.navigation} title={'Home'} theme={theme}  />
+            <RenderErrorBlog getDatas={this._getDatas} theme={theme}  />
             <Toast
               opacity={0.5}
               ref={ref => { this.toast = ref; }} />
@@ -126,7 +125,7 @@ export class HomeScreen extends React.Component {
       return (
         <Layout style={{paddingBottom:40, position:'relative', backgroundColor:theme.CARD_TEXT_BG}}>
           {
-            !this.state.hideHeader?<Header navigation={this.props.navigation} title={'Home'} />:null
+            !this.state.hideHeader?<Header navigation={this.props.navigation} title={'Home'} theme={theme} />:null
           }
             <TabView
                style={{margin:0,padding:0,}}
@@ -151,6 +150,8 @@ export class HomeScreen extends React.Component {
                   blogError={this.props.blogError}
                   blogs={this.props.blogs}
                   blogMain={this.props.blogMain}
+
+                  theme={this.props.theme}
                 />
               </Tab>
               
@@ -169,6 +170,7 @@ export class HomeScreen extends React.Component {
                     blogError={this.props.headlineError}
                     blogs={this.props.headline}
                     blogMain={{}}
+                    theme={this.props.theme}
                   />
               </Tab>
               <Tab title='Terpopuler' titleStyle={{ color:'#CCCCCC',}}>
@@ -186,6 +188,7 @@ export class HomeScreen extends React.Component {
                     blogError={this.props.populerError}
                     blogs={this.props.populer}
                     blogMain={{}}
+                    theme={this.props.theme}
                   />
               </Tab>
             </TabView>
@@ -214,4 +217,5 @@ function mapStateToProps(state) {
       populerLoading: state.BlogStore.populerLoading,
   }
 }
-export default connect(mapStateToProps, {fetchBlogs, fetchHeadline, fetchPopuler})(HomeScreen);
+const Homesc = withTheme(HomeScreen);
+export default connect(mapStateToProps, {fetchBlogs, fetchHeadline, fetchPopuler})(Homesc);

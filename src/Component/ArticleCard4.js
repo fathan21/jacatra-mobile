@@ -1,8 +1,47 @@
 import * as React from 'react';
-import { StyleSheet, View, TouchableOpacity,} from 'react-native';
+import { StyleSheet, TouchableOpacity,} from 'react-native';
 import { Layout, Text } from 'react-native-ui-kitten';
 import ProgressiveImage from './ProgressiveImage';
-export default AricleCard4 =({data, goToPage}) => {
+export default AricleCard4 =({data, goToPage, theme}) => {
+  const styles = StyleSheet.create({
+    container: {
+        backgroundColor:'#ffffff',
+    },
+    card3: {
+      borderRadius: 0,
+      margin:5,
+      overflow: 'hidden',
+      paddingBottom:10,
+      paddingTop:10,
+      paddingLeft: 10,
+      paddingRight: 5,
+      display:'flex',
+      justifyContent:'flex-start',
+      alignItems:'flex-start',
+      borderBottomColor:'black',
+      width:200
+    },
+    card3Title: {
+      fontSize:14,
+      fontWeight:'bold',
+      marginTop:10,
+      textAlign:'left',
+      marginBottom:10,
+    },
+    card3Media: {
+        height: 100,
+        width:'100%',
+        backgroundColor:'#cccccc',
+        borderRadius: 0,
+        display:'flex',
+        justifyContent:'center',
+        alignItems:'center',
+    },
+    text: {
+      marginVertical: 5,
+      color:'#FFFFFF'
+    },
+  });
     return (
         <TouchableOpacity
           activeOpacity={0.9}
@@ -18,43 +57,3 @@ export default AricleCard4 =({data, goToPage}) => {
         </TouchableOpacity>
     );
 }
-
-const styles = StyleSheet.create({
-  container: {
-      backgroundColor:'#ffffff',
-  },
-  card3: {
-    borderRadius: 0,
-    margin:5,
-    overflow: 'hidden',
-    paddingBottom:10,
-    paddingTop:10,
-    paddingLeft: 10,
-    paddingRight: 5,
-    display:'flex',
-    justifyContent:'flex-start',
-    alignItems:'flex-start',
-    borderBottomColor:'black',
-    width:200
-  },
-  card3Title: {
-    fontSize:14,
-    fontWeight:'bold',
-    marginTop:10,
-    textAlign:'left',
-    marginBottom:10,
-  },
-  card3Media: {
-      height: 100,
-      width:'100%',
-      backgroundColor:'#cccccc',
-      borderRadius: 0,
-      display:'flex',
-      justifyContent:'center',
-      alignItems:'center',
-  },
-  text: {
-    marginVertical: 5,
-    color:'#FFFFFF'
-  },
-});

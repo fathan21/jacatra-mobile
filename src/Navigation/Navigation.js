@@ -1,9 +1,8 @@
 import React, {Component} from "react";
-import PropTypes from 'prop-types';
-import { View, Text, Button, ScrollView, StyleSheet, Image } from "react-native";
+import { View, Text, Dimensions, ScrollView, StyleSheet, Image } from "react-native";
 import { 
     createMaterialTopTabNavigator, createSwitchNavigator,
-    createBottomTabNavigator, createStackNavigator, createAppContainer, createDrawerNavigator, NavigationActions } from "react-navigation";
+     createStackNavigator, createAppContainer, createDrawerNavigator, NavigationActions } from "react-navigation";
 
 import {
   List,
@@ -21,28 +20,14 @@ import CategoryScreen from "../Screen/Category";
 import SettingScreen from "../Screen/Setting";
 import SearchScreen from "../Screen/Search";
 
-import theme, {globalStyle} from '../assets/style';
+import  {globalStyle} from '../assets/style';
 import {logo} from '../assets/images';
 import { TouchableOpacity } from "react-native-gesture-handler";
+import { withTheme } from '../Redux/theme';
 
-const styles = StyleSheet.create({
-  icon: {
-    width: 24,
-    height: 24,
-  },
-  container: {
-    paddingTop:20,
-    backgroundColor:'#ffffff'
-  },
-  listItemTitle:{
-    fontSize:18,
-    margin:0,
-    color: '#ffffff',
-    backgroundColor:'#ffffff'
-  }
-});
+const heightWindow = Dimensions.get('window').height;
 
-class drawerContentComponents extends Component {
+class drawerContentComponent extends Component {
     state={
       menuSetting: [
         {
@@ -119,7 +104,11 @@ class drawerContentComponents extends Component {
           img:MenuIconWhite
         }
       ],
-
+    }
+    
+    constructor(props) {
+      super(props);
+      this.renderItem = this.renderItem.bind(this);
     }
     navigateToScreen = ( route,param ) =>(
         () => {
@@ -147,6 +136,24 @@ class drawerContentComponents extends Component {
     })
 
     renderItem = ({ item })=>{
+      const {theme} = this.props;
+      
+      const styles = StyleSheet.create({
+        icon: {
+          width: 24,
+          height: 24,
+        },
+        container: {
+          paddingTop:20,
+          backgroundColor:theme.PRIMARY_COLOR
+        },
+        listItemTitle:{
+          fontSize:18,
+          margin:0,
+          color: theme.PRIMARY_COLOR,
+          backgroundColor:theme.PRIMARY_COLOR
+        }
+      });
       return (
           
         <TouchableOpacity
@@ -154,17 +161,18 @@ class drawerContentComponents extends Component {
           onPress={this.navigateToScreen(item.link,item.param)}
           >
             <View  style={{ borderBottomWidth: 0, width: '100%',
-            marginVertical:5,paddingVertical:0, borderBottomColor:'#ffffff'}}>
-              <Text style={{color:theme.PRIMARY_COLOR,fontSize:16, marginLeft:10,fontWeight:'bold'}}>{item.name}</Text>
+            marginVertical:5,paddingVertical:0, borderBottomColor:theme.PRIMARY_COLOR}}>
+              <Text style={{color:theme.CARD_TEXT_COLOR,fontSize:16, marginLeft:10,fontWeight:'bold'}}>{item.name}</Text>
             </View>
         </TouchableOpacity>
       );
     }
 
     render() {
+      const {theme} = this.props;
       return (
-        <View style={{backgroundColor:'#ffffff'}}>
-          <View style={{marginBottom:10, display:'flex',justifyContent:'flex-end', alignItems:'center',backgroundColor:theme.PRIMARY_COLOR,
+        <View style={{backgroundColor:theme.SIDE_BG, minHeight:heightWindow}}>
+          <View style={{marginBottom:10, display:'flex',justifyContent:'flex-end', alignItems:'center',backgroundColor:theme.PRIMARY_HEADER_BG,
             height:90, paddingBottom:10
           }}>
             <Image
@@ -172,16 +180,16 @@ class drawerContentComponents extends Component {
                 source={logo.imageSource}
               />
           </View>
-          <ScrollView style={{backgroundColor:'#ffffff'}}>
+          <ScrollView style={{backgroundColor:theme.SIDE_BG}}>
               <List
-                style={{backgroundColor:'#ffffff', borderBottomWidth:1,paddingBottom:10, borderBottomColor:theme.PRIMARY_COLOR, marginBottom:10}}
-                descriptionStyle={{backgroundColor:'#ffffff'}}
+                style={{backgroundColor:theme.SIDE_BG, borderBottomWidth:1,paddingBottom:10, borderBottomColor:theme.PRIMARY_HEADER_BG, marginBottom:10}}
+                descriptionStyle={{backgroundColor:theme.SIDE_BG}}
                 data={this.state.menu}
                 renderItem={this.renderItem}
               />
               <List
-                style={{backgroundColor:'#ffffff', borderBottomWidth:0,paddingBottom:10, borderBottomColor:theme.PRIMARY_COLOR}}
-                descriptionStyle={{backgroundColor:'#ffffff'}}
+                style={{backgroundColor:theme.SIDE_BG, borderBottomWidth:0,paddingBottom:10, borderBottomColor:theme.PRIMARY_HEADER_BG}}
+                descriptionStyle={{backgroundColor:theme.SIDE_BG}}
                 data={this.state.menuSetting}
                 renderItem={this.renderItem}
               />
@@ -190,6 +198,8 @@ class drawerContentComponents extends Component {
       )
     }
 }
+
+const drawerContentComponents = withTheme(drawerContentComponent);
 /*
 const AppNavigator = createStackNavigator(
   {
