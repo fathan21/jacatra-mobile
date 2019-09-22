@@ -1,4 +1,4 @@
-package com.jacatranet;
+package com.h3.jacatranet;
 
 import com.facebook.react.ReactActivity;
 

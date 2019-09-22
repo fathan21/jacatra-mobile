@@ -1,32 +1,29 @@
 import React from "react";
-import { View,ImageBackground } from "react-native";
+import {View, ImageBackground} from "react-native";
 import {getAppSetting} from '../Redux/helper';
 
-import { withTheme } from '../Redux/theme';
+import {withTheme} from '../Redux/theme';
 
 import {logo} from '../assets/images';
 export class SplashScreen extends React.Component {
-  performTimeConsumingTask = async() => {
-    getAppSetting().then((e)=>{
+  performTimeConsumingTask = async () => {
+    getAppSetting().then((e) => {
       // return e;
     });
-    return new Promise((resolve) =>
-      setTimeout(
-        () => { resolve('result') },
-        2000
-      )
-    )
+    return new Promise((resolve) => setTimeout(() => {
+      resolve('result')
+    }, 2000))
   }
 
   async componentDidMount() {
-    
+
     const data = await this.performTimeConsumingTask();
 
     if (data !== null) {
       this.props.navigation.navigate('App');
     }
   }
- /*
+  /*
   function updateAppNotice(){
     const APP_STORE_LINK = 'itms://itunes.apple.com/us/app/apple-store/myiosappid?mt=8';
     const PLAY_STORE_LINK = 'market://details?id=myandroidappid';
@@ -47,25 +44,25 @@ export class SplashScreen extends React.Component {
 }
 */
   render() {
-    return ( 
-    <View style={[styles.viewStyles, {backgroundColor:this.props.theme.PRIMARY_COLOR}]}>
-      <ImageBackground source={logo.imageSource} style={styles.bg}>
-      </ImageBackground>
-    </View>
-    );
+    return (<View style={[
+        styles.viewStyles, {
+          backgroundColor: this.props.theme.PRIMARY_COLOR
+        }
+      ]}>
+      <ImageBackground source={logo.imageSource} style={styles.bg}></ImageBackground>
+    </View>);
   }
 }
 const styles = {
   viewStyles: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'center'
   },
   bg: {
     width: 300,
     height: 100
   }
 }
-
 
 export default PageSc = withTheme(SplashScreen);

@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-  package="com.jacatranet">
+  package="com.h3.jacatranet">
 
     <uses-permission android:name="android.permission.INTERNET" />
 

@@ -1,21 +1,25 @@
 import React from "react";
-import { View, Image,  ScrollView, ActivityIndicator, RefreshControl, Dimensions, TouchableOpacity } from "react-native";
 import {
-    Layout, TopNavigation, Input,Text
-} from 'react-native-ui-kitten';
+  View,
+  Image,
+  ScrollView,
+  ActivityIndicator,
+  RefreshControl,
+  Dimensions,
+  TouchableOpacity
+} from "react-native";
+import {Layout, TopNavigation, Input, Text} from 'react-native-ui-kitten';
 
-import {
-  SafeAreaView as SafeAreaViewReactNavigation,
-} from 'react-navigation';
+import {SafeAreaView as SafeAreaViewReactNavigation} from 'react-navigation';
 import {RenderErrorBlog, GeneralStatusBarColor} from '../Component';
 
 import {api} from '../Redux/Actions';
-import  {globalStyle} from '../assets/style';
+import {globalStyle} from '../assets/style';
 
 import {BackImg} from '../assets/images';
 
-import { ArticleCard2 } from '../Component/';
-import { withTheme } from '../Redux/theme';
+import {ArticleCard2} from '../Component/';
+import {withTheme} from '../Redux/theme';
 
 const widthWindow = Dimensions.get('window').width;
 const heightWindow = Dimensions.get('window').height;
@@ -23,13 +27,13 @@ export class SarchScreen extends React.Component {
   state = {
     isRefreshing: false,
     loading: false,
-    error: false, 
+    error: false,
     submit: false,
-    q:'',
-    type:'q',
+    q: '',
+    type: 'q',
     data: [],
-    realted:[]
-  } 
+    realted: []
+  }
   _isMounted = false;
   constructor(props) {
     super(props);
@@ -37,195 +41,182 @@ export class SarchScreen extends React.Component {
     this.inputS = React.createRef();
     this._goToPage = this._goToPage.bind(this);
   }
-  
+
   componentDidMount() {
-    
+
     //console.warn(this.inputS);
   };
-  
-  componentWillMount(){
+
+  componentWillMount() {
     this._isMounted = true;
-    const { navigation } = this.props;
+    const {navigation} = this.props;
     const type = navigation.getParam('type');
     const val = navigation.getParam('val');
     if (type !== undefined) {
       this.setState({
-        type:type,
+        type: type,
         q: val
-      }, ()=>{this._getData()})
+      }, () => {
+        this._getData()
+      })
     } else {
       let app = this;
-      setTimeout(function(){ app.inputS.current.focus();}, 1000);
+      setTimeout(function() {
+        app.inputS.current.focus();
+      }, 1000);
     }
   }
   onInputValueChange = (q) => {
-    this.setState({ q });
+    this.setState({q});
   };
-  onSubmitEditing =(e) => {   
-    if (this.state.q == '' || this.state.q == null ){
+  onSubmitEditing = (e) => {
+    if (this.state.q == '' || this.state.q == null) {
       return;
     }
-    this.setState({
-      submit:true
-    })
+    this.setState({submit: true})
     this._getData();
   }
-  
+
   renderLeftControl = () => {
-      const {theme} = this.props;
-      return (
-        
-        <View style = {{display: 'flex',flexDirection: 'row', alignItems:'center'}} >
-          
-          
-            <TouchableOpacity 
-              onPress={()=>this.props.navigation.goBack()}
-            >
-              <Image
-                  style={globalStyle.btnImgHeader}
-                  source={BackImg.imageSource}
-              />
-            </TouchableOpacity>
-          {
-            this.state.type == 'q'?  
-            <Input
-              ref={this.inputS}
-              value={this.state.q}
-              onChangeText={this.onInputValueChange}
-              size={'small'}
-              placeholder="cari.."
-              onSubmitEditing={this.onSubmitEditing}
-              style={{width:widthWindow-80, padding:0, fontSize:13}}
-              textStyle={{padding:0,margin:0}}
-            />: <Text style={{color:theme.PRIMARY_TEXT_COLOR, fontSize:20, textTransform:'capitalize'}}>{this.state.q}</Text>
-          }
-        </View>
-      );
+    const {theme} = this.props;
+    return (<View style={{
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center'
+      }}>
+
+      <TouchableOpacity onPress={() => this.props.navigation.goBack()}>
+        <Image style={globalStyle.btnImgHeader} source={BackImg.imageSource}/>
+      </TouchableOpacity>
+      {
+        this.state.type == 'q'
+          ? <Input ref={this.inputS} value={this.state.q} onChangeText={this.onInputValueChange} size={'small'} placeholder="cari.." onSubmitEditing={this.onSubmitEditing} style={{
+                width: widthWindow - 80,
+                padding: 0,
+                fontSize: 13
+              }} textStyle={{
+                padding: 0,
+                margin: 0
+              }}/>
+          : <Text style={{
+                color: theme.PRIMARY_TEXT_COLOR,
+                fontSize: 20,
+                textTransform: 'capitalize'
+              }}>{this.state.q}</Text>
+      }
+    </View>);
   }
-  renderRightControls = () => {  
-      return (
-        <View style = {{display: 'flex',flexDirection: 'row'}} >
-         
-        </View>
-    );
+  renderRightControls = () => {
+    return (<View style={{
+        display: 'flex',
+        flexDirection: 'row'
+      }}></View>);
   }
-  
+
   _goToPage = (item) => {
-    if(!item.id){
+    if (!item.id) {
       return;
     }
-    this.props.navigation.push('Page', {
-        itemId: item.link,
-    })
+    this.props.navigation.push('Page', {itemId: item.link})
   }
-  componentWillUnmount(){
+  componentWillUnmount() {
     this._isMounted = false;
-    this.setState( {
-      isRefreshing: false,
-      loading: false,
-      error: false, 
-      data: {},
-      realted:[]
-    });
+    this.setState({isRefreshing: false, loading: false, error: false, data: {}, realted: []});
   }
-  _onRefresh = ()=>{
-    
-  }
+  _onRefresh = () => {}
   _getData = () => {
     let params = {
-      page:1,
+      page: 1,
       limit: 50,
-      q:''
+      q: ''
     };
-    if (this.state.type == 'tag'){
-        params.tag = this.state.q;
-    }else if (this.state.type == 'writer'){
+    if (this.state.type == 'tag') {
+      params.tag = this.state.q;
+    } else if (this.state.type == 'writer') {
       params.writer = this.state.q;
-    }
-    else {
+    } else {
       params.q = this.state.q;
-    } 
-    this.setState({loading:true},()=>{
-      api.post('news',{filter:params}).then((res) => {
-        if(!this._isMounted){
+    }
+    this.setState({
+      loading: true
+    }, () => {
+      api.post('news', {filter: params}).then((res) => {
+        if (!this._isMounted) {
           return;
         }
-        this.setState({
-          loading: false,
-          isRefreshing:false,
-          data: res.data.data
-        });
-      }).catch((e)=>{
-        if(!this._isMounted){
+        this.setState({loading: false, isRefreshing: false, data: res.data.data});
+      }).catch((e) => {
+        if (!this._isMounted) {
           return;
         }
-        this.setState({
-          loading: false,
-          isRefreshing:false,
-          error: true
-        });
+        this.setState({loading: false, isRefreshing: false, error: true});
       });
     });
   }
-  
+
   render() {
-    
-    const { navigation, theme } = this.props;
 
-    return (
-      <Layout style={{paddingBottom:50, backgroundColor:theme.CARD_TEXT_BG, minHeight:heightWindow}}>
-        
-        <GeneralStatusBarColor backgroundColor={theme.PRIMARY_COLOR}
-                  barStyle="light-content"/>
-        <SafeAreaViewReactNavigation >
-          <TopNavigation alignment = 'start'
-              style={{backgroundColor:theme.PRIMARY_HEADER_BG, marginBottom:10, color:theme.PRIMARY_TEXT_COLOR}}
-              leftControl={this.renderLeftControl()}
-              rightControls = {
-                this.renderRightControls()
-              }
-              />
-        </SafeAreaViewReactNavigation>
-        <ScrollView 
-          style={{backgroundColor:theme.CARD_TEXT_BG}}
-          refreshControl={
-              <RefreshControl
-                refreshing={this.state.isRefreshing}
-                onRefresh={this._onRefresh}
-                tintColor="#000000"
-                title="Loading..."
-                titleColor="#000000"
-                colors={['#000000', '#000000', '#000000']}
-                progressBackgroundColor="#ffffff"
-              />
+    const {navigation, theme} = this.props;
+
+    return (<Layout style={{
+        paddingBottom: 50,
+        backgroundColor: theme.CARD_TEXT_BG,
+        minHeight: heightWindow
+      }}>
+
+      <GeneralStatusBarColor backgroundColor={theme.PRIMARY_COLOR} barStyle="light-content"/>
+      <SafeAreaViewReactNavigation >
+        <TopNavigation alignment='start' style={{
+            backgroundColor: theme.PRIMARY_HEADER_BG,
+            marginBottom: 10,
+            color: theme.PRIMARY_TEXT_COLOR
+          }} leftControl={this.renderLeftControl()} rightControls={this.renderRightControls()}/>
+      </SafeAreaViewReactNavigation>
+      <ScrollView style={{
+          backgroundColor: theme.CARD_TEXT_BG
+        }} refreshControl={<RefreshControl
+        refreshing = {
+          this.state.isRefreshing
+        }
+        onRefresh = {
+          this._onRefresh
+        }
+        tintColor = "#000000"
+        title = "Loading..."
+        titleColor = "#000000"
+        colors = {
+          ['#000000', '#000000', '#000000']
+        }
+        progressBackgroundColor = "#ffffff"
+        />}>
+        {
+          this.state.loading
+            ? <ActivityIndicator size="large" color={theme.PRIMARY_COLOR}/>
+            : null
+        }
+        {
+          this.state.error
+            ? <RenderErrorBlog getDatas={this._getData} theme={theme}/>
+            : null
+        }
+        <ScrollView>
+          {
+            !this.state.loading && !this.state.error
+              ? this.state.data.length == 0 && this.state.submit
+                ? <Text style={{
+                      marginVertical: 50,
+                      textAlign: 'center',
+                      color: theme.CARD_TEXT_COLOR
+                    }}>Data tidak ditemukan</Text>
+                : this.state.data.map((blog, i) => {
+                  return (<ArticleCard2 goToPage={this._goToPage} key={i} data={blog} theme={theme}/>);
+                })
+              : null
           }
-          >
-            {
-              this.state.loading? 
-              <ActivityIndicator size="large" color={theme.PRIMARY_COLOR} />: null
-            }
-            {
-              this.state.error? 
-              <RenderErrorBlog getDatas={this._getData} theme={theme} />: null
-            }
-            <ScrollView>
-              {
-                !this.state.loading && !this.state.error?
-                this.state.data.length == 0 && this.state.submit? 
-                  <Text style={{marginVertical:50, textAlign:'center', color:theme.CARD_TEXT_COLOR}}>Data tidak ditemukan</Text>:
-                  this.state.data.map((blog, i) => {
-                    return (
-                      <ArticleCard2 goToPage={this._goToPage} key={i}  data={blog} theme={theme}   />
-                    );
-                  })
-                :null
-              }
-            </ScrollView>
-            
+        </ScrollView>
 
-          </ScrollView>
-      </Layout>
-    );
+      </ScrollView>
+    </Layout>);
   }
 }
 

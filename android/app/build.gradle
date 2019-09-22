@@ -111,7 +111,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.jacatranet"
+        applicationId "com.h3.jacatranet"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1 // google
