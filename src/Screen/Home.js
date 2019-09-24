@@ -114,19 +114,8 @@ export class HomeScreen extends React.Component {
   };
   renderListHeader() {
     const {theme} = this.props;
-    console.warn(this.state.scrollY);
     return (
-        <Animated.View
-            style={
-                {
-                    width: '100%',
-                    //position:'absolute',
-                    top:0,
-                    height:this.headerHeight,
-                }
-              }>
             <Header navigation={this.props.navigation} title={'Home'} theme={theme}/>
-        </Animated.View>
     );
   }
   render() {

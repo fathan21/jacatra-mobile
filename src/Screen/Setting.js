@@ -165,7 +165,7 @@ export class SettingScreen extends React.Component {
           color: theme.CARD_TEXT_COLOR
         }
       ]}>
-      <HeaderBack navigation={this.props.navigation} title={'title'} theme={theme}/>
+      <HeaderBack navigation={this.props.navigation} title={'title'} theme={theme} />
       <Modal visible={this.state.modalVisible} animationType="slide" transparent={true} style={{}} onRequestClose={() => {
           this.setState({modalVisible: false});
         }}>

@@ -6,7 +6,8 @@ import {
   View,
   Text,
   TouchableOpacity,
-  Linking
+  Linking,
+  StyleSheet
 } from "react-native";
 import {Layout} from 'react-native-ui-kitten';
 import HTML from 'react-native-render-html';
@@ -258,14 +259,14 @@ export class BlogDetailContainer extends React.Component {
               marginVertical: 10,
               marginHorizontal: 10
             }}>
-            <Text style={{
+            <Text style={[{
                 fontSize: titelFontSize,
                 fontWeight: 'bold',
                 marginBottom: 10,
                 color: this.props.theme.CARD_TEXT_COLOR,
                 letterSpacing: 1.5,
-                textAlign: 'justify'
-              }}>
+                textAlign: 'justify',
+              }, styles.title]}>
               {data.title}
             </Text>
             <TouchableOpacity onPress={(e) => {
@@ -278,7 +279,8 @@ export class BlogDetailContainer extends React.Component {
               <Text style={{
                   fontSize: subContentFontsize,
                   color: '#767676',
-                  textTransform: 'capitalize'
+                  textTransform: 'capitalize',
+                  fontFamily:'robotoregular',
                 }}>
                 {data.writer}
                 {'\n'}
@@ -305,6 +307,7 @@ export class BlogDetailContainer extends React.Component {
                         marginBottom: 10,
                         color: 'black',
                         letterSpacing: 1,
+                        fontFamily:'robotoregular',
                         textAlign: 'justify',
                         color: this.props.theme.CARD_TEXT_COLOR,
                         fontSize: contentFontSize
@@ -344,3 +347,9 @@ export class BlogDetailContainer extends React.Component {
     </Layout>);
   }
 }
+
+const styles = StyleSheet.create({
+  title:{
+    fontFamily:'robotoregular'
+  }
+});
