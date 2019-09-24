@@ -61,7 +61,11 @@ export class BlogListContainer extends React.Component {
           marginBottom: 100
         }} ref={(c) => {
           this.scroll = c
-        }} onScroll ={
+        }}
+        scrollEventThrottle={1}
+        bounces={false}
+        showsVerticalScrollIndicator={false} 
+        onScroll ={
               ({nativeEvent}) => {
 
 
@@ -75,7 +79,7 @@ export class BlogListContainer extends React.Component {
                   
                   // hideHeader(cl);
                   // console.warn(direction);
-                  // hideHeader(direction);
+                hideHeader(currentOffset);
                 if(nativeEvent.contentOffset.y > 200) {
                   if(!this.state.showBtnToTop) {
                     this.setState({showBtnToTop:true})
@@ -144,7 +148,7 @@ export class BlogListContainer extends React.Component {
                 bottom: 200,
                 width: 40,
                 height: 40,
-                backgroundColor: theme.PRIMARY_COLOR,
+                backgroundColor: theme.PRIMARY_HEADER_BG,
                 color: theme.PRIMARY_TEXT_COLOR,
                 display: 'flex',
                 alignItems: 'center',

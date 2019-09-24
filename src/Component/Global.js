@@ -12,15 +12,17 @@ export const RenderErrorBlog = ({getDatas, theme}) => {
     <View style={{
         textAlign: 'center',
         marginVertical: 50,
-        marginHorizontal: 16
+        marginHorizontal: 16,
+        height:'100%'
       }}>
       <Text style={{
           textAlign: 'center',
-          fontSize: 15
+          fontSize: 15,
+          color:theme.CARD_TEXT_COLOR
         }}>
         Koneksi gagal, silahkan coba lagi
       </Text>
-      <Button onPress={() => getDatas()} style={globalStyle.btnPrimary}>
+      <Button onPress={() => getDatas()} style={theme.btnPrimary}>
         Coba Lagi
       </Button>
     </View>

@@ -80,6 +80,7 @@ export class CategoryScreen extends React.Component {
     });
   }
   _getDatas = () => {
+    let filter = this.state.filter;
     this.setState({isRefreshing: true});
     this.props.fetchBlogsCat(filter);
   };
@@ -119,7 +120,7 @@ export class CategoryScreen extends React.Component {
     if (this.props.blogError.global) {
       return (<View>
         <Header navigation={this.props.navigation} title={params.title} theme={theme}/>
-        <RenderErrorBlog getDatas={this._getDatas}/>
+        <RenderErrorBlog getDatas={this._getDatas} theme={theme} />
       </View>);
     }
     return (<Layout style={{

@@ -21,7 +21,6 @@ const defaultState = {
 }
 
 export default (state=defaultState, action={}) => {
-  // console.warn(action);
   switch (action.type) {
     
     case 'FETCH_POPULER_FULFILLED': {
@@ -101,6 +100,21 @@ export default (state=defaultState, action={}) => {
         blogError: {}
       }
     }
+    
+    case 'FETCH_BLOGS_NEW_PENDING': {
+      return {
+        ...state,
+        blogLoading: true,
+        blogError: {}
+      }
+    }
+    case 'FETCH_BLOGS_NEW_REJECTED': {
+      return {
+        ...state,
+        blogLoading: true,
+        blogError: { global: action.payload.message }
+      }
+    }
     case 'FETCH_BLOGS_PENDING': {
       return {
         ...state,
@@ -118,7 +132,7 @@ export default (state=defaultState, action={}) => {
     
     case 'FETCH_BLOGS_CAT_FULFILLED': {
       //console.warn(action.payload.cat);
-      console.log(action.payload);
+      // console.log(action.payload);
       let blogsByCat = jsonCopy(state.blogsByCat);
       let blogMainByCat = jsonCopy(state.blogMainByCat);
       let blogCountByCat = jsonCopy(state.blogCountByCat);

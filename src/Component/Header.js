@@ -2,7 +2,7 @@ import * as React from 'react';
 import {
     StyleSheet,
     View,
-    Image,
+    Image,Text
 } from 'react-native';
 import {
     TopNavigation,
@@ -33,12 +33,15 @@ export class Header extends React.Component {
     };
     renderLeftControl = () => {
         return (
-          
+        
           <View style = {{display: 'flex',flexDirection: 'row', justifyContent:'center',alignItems:'flex-start'}} >
-            <Image
-                style={globalStyle.logo}
-                source={logo.imageSource}
-            />
+          {
+            this.props.title == 'Home'?
+              <Image
+                  style={globalStyle.logo}
+                  source={logo.imageSource}
+              />:<Text style={{color:'#ffffff',fontSize:18}}>{this.props.title}</Text>
+          }
           </View>
         );
     }
@@ -69,9 +72,7 @@ export class Header extends React.Component {
       const {theme} = this.props;
         return (
               <SafeAreaViewReactNavigation >
-                
-                <GeneralStatusBarColor backgroundColor={theme.PRIMARY_HEADER_BG}
-                  barStyle="light-content"/>
+                <GeneralStatusBarColor backgroundColor={theme.PRIMARY_HEADER_BG} barStyle="light-content"/>
                 <TopNavigation alignment = 'start'
                     style={{backgroundColor:theme.PRIMARY_HEADER_BG, marginBottom:0, color:theme.PRIMARY_TEXT_COLOR}}
                     leftControl={this.renderLeftControl()}

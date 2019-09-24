@@ -132,9 +132,7 @@ export class HeaderBack extends React.Component {
       // console.warn(isB);    
         return (
               <SafeAreaViewReactNavigation >
-                
-                <GeneralStatusBarColor backgroundColor={theme.PRIMARY_COLOR}
-                  barStyle="light-content"/>
+                <GeneralStatusBarColor backgroundColor={theme.PRIMARY_HEADER_BG} barStyle="light-content"/>
                 <TopNavigation alignment = 'start'
                     style={{backgroundColor:theme.PRIMARY_HEADER_BG, marginBottom:0, color:theme.PRIMARY_TEXT_COLOR}}
                     leftControl={this.renderLeftControl()}

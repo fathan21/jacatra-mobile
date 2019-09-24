@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import {connect} from 'react-redux';
-import {View, Dimensions} from 'react-native';
+import {View, Dimensions, Animated} from 'react-native';
 import {TabView, Tab, Layout} from 'react-native-ui-kitten';
 import Toast from 'react-native-easy-toast';
 
@@ -12,6 +12,7 @@ import {fetchBlogs, fetchHeadline, fetchPopuler} from '../Redux/Actions/Blog-act
 import {withTheme} from '../Redux/theme';
 
 export class HomeScreen extends React.Component {
+  headerHeight = 75;
   state = {
     t: 0,
     loading: false,
@@ -24,7 +25,8 @@ export class HomeScreen extends React.Component {
       q: ''
     },
     selectedIndexTab: 0,
-    hideHeader: false
+    hideHeader: false,
+    scrollY: new Animated.Value(0)
   }
   toast = null;
   constructor(props) {
@@ -32,6 +34,7 @@ export class HomeScreen extends React.Component {
 
     this._goToPage = this._goToPage.bind(this);
     this._getDatas = this._getDatas.bind(this);
+    this.renderListHeader = this.renderListHeader.bind(this);
   }
 
   componentDidMount() {};
@@ -41,7 +44,7 @@ export class HomeScreen extends React.Component {
     }
   };
   _hideHeaderAct = (hd) => {
-    this.setState({hideHeader: hd});
+    // this.setState({hideHeader: hd});
   }
 
   _onRefresh = () => {
@@ -109,6 +112,23 @@ export class HomeScreen extends React.Component {
     // console.warn(index, this.state.selectedIndexTab);
     return index === this.state.selectedIndexTab;
   };
+  renderListHeader() {
+    const {theme} = this.props;
+    console.warn(this.state.scrollY);
+    return (
+        <Animated.View
+            style={
+                {
+                    width: '100%',
+                    //position:'absolute',
+                    top:0,
+                    height:this.headerHeight,
+                }
+              }>
+            <Header navigation={this.props.navigation} title={'Home'} theme={theme}/>
+        </Animated.View>
+    );
+  }
   render() {
     const {theme} = this.props;
     if (this.props.blogError.global) {
@@ -126,11 +146,7 @@ export class HomeScreen extends React.Component {
         position: 'relative',
         backgroundColor: theme.CARD_TEXT_BG
       }}>
-      {
-        !this.state.hideHeader
-          ? <Header navigation={this.props.navigation} title={'Home'} theme={theme}/>
-          : null
-      }
+      {this.renderListHeader()}
       <TabView style={{
           margin: 0,
           padding: 0

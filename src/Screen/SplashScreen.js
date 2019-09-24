@@ -5,6 +5,7 @@ import {getAppSetting} from '../Redux/helper';
 import {withTheme} from '../Redux/theme';
 
 import {logo} from '../assets/images';
+import { GeneralStatusBarColor } from "../Component/GeneralStatusBarColor";
 export class SplashScreen extends React.Component {
   performTimeConsumingTask = async () => {
     getAppSetting().then((e) => {
@@ -44,11 +45,13 @@ export class SplashScreen extends React.Component {
 }
 */
   render() {
+    const {theme} = this.props;
     return (<View style={[
         styles.viewStyles, {
           backgroundColor: this.props.theme.PRIMARY_COLOR
         }
       ]}>
+      <GeneralStatusBarColor backgroundColor={theme.PRIMARY_HEADER_BG} barStyle="light-content"/>
       <ImageBackground source={logo.imageSource} style={styles.bg}></ImageBackground>
     </View>);
   }

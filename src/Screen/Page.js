@@ -6,9 +6,8 @@ import Toast from 'react-native-easy-toast';
 
 import {App} from '../Redux/const';
 import {_isBookmark, _saveBookmark} from '../Redux/helper';
-import {RenderLoadingBlogDetail, RenderErrorBlog, HeaderBack} from '../Component/';
+import {RenderLoadingBlogDetail, RenderErrorBlog, HeaderBack, GeneralStatusBarColor} from '../Component/';
 import {BlogDetailContainer} from '../Container';
-import theme from "../assets/style";
 const widthWindow = Dimensions.get('window').width;
 const heightWindow = Dimensions.get('window').height;
 import {withTheme} from '../Redux/theme';
@@ -180,7 +179,6 @@ export class PageScreen extends React.Component {
     this.setState({fontSizeType: e})
   }
   render() {
-
     const {navigation, theme} = this.props;
     const itemId = navigation.getParam('itemId', 'NO-ID');
 
@@ -189,6 +187,8 @@ export class PageScreen extends React.Component {
           backgroundColor: theme.CARD_TEXT_BG,
           minHeight: heightWindow
         }}>
+          
+        <GeneralStatusBarColor backgroundColor={theme.PRIMARY_HEADER_BG} barStyle="light-content"/>
         <HeaderBack navigation={this.props.navigation} title={'title'} share={this._shareText} data={this.state.data} isBookmark={this.state.isBookmark} saveBookmark={this._saveBookmark} theme={theme}/>
         <RenderLoadingBlogDetail theme={theme}/>
       </View>);
@@ -198,6 +198,8 @@ export class PageScreen extends React.Component {
           backgroundColor: theme.CARD_TEXT_BG,
           minHeight: heightWindow
         }}>
+          
+        <GeneralStatusBarColor backgroundColor={theme.PRIMARY_HEADER_BG} barStyle="light-content"/>
         <HeaderBack navigation={this.props.navigation} title={'title'} share={this._shareText} data={this.state.data} isBookmark={this.state.isBookmark} saveBookmark={this._saveBookmark} theme={theme}/>
         <RenderErrorBlog getDatas={() => this._getData(itemId)} theme={theme}/>
       </View>);
@@ -206,6 +208,7 @@ export class PageScreen extends React.Component {
     return (<Layout style={{
         paddingBottom: 0
       }}>
+      <GeneralStatusBarColor backgroundColor={theme.PRIMARY_HEADER_BG} barStyle="light-content"/>
       <HeaderBack navigation={this.props.navigation} title={'title'} share={this._shareText} data={this.state.data} isBookmark={this.state.isBookmark} saveBookmark={this._saveBookmark} fontSizeChange={this._fontSizeChange} theme={theme}/>
       <BlogDetailContainer data={this.state.data} isRefreshing={this.state.isRefreshing} onRefresh={this._onRefresh} navigation={this.props.navigation} realted={this.state.realted} goToPage={this._goToPage} fontSizeType={this.state.fontSizeType} theme={theme}/>
 

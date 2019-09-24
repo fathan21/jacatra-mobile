@@ -164,7 +164,7 @@ export class SarchScreen extends React.Component {
         minHeight: heightWindow
       }}>
 
-      <GeneralStatusBarColor backgroundColor={theme.PRIMARY_COLOR} barStyle="light-content"/>
+      <GeneralStatusBarColor backgroundColor={theme.PRIMARY_HEADER_BG} barStyle="light-content"/>
       <SafeAreaViewReactNavigation >
         <TopNavigation alignment='start' style={{
             backgroundColor: theme.PRIMARY_HEADER_BG,

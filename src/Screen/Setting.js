@@ -27,7 +27,7 @@ import {logo} from '../assets/images';
 import {getAppSetting} from '../Redux/helper';
 const widthWindow = Dimensions.get('window').width;
 const heightWindow = Dimensions.get('window').height;
-import {HeaderBack} from '../Component/';
+import {HeaderBack, GeneralStatusBarColor} from '../Component/';
 
 const baseOS = DeviceInfo.getSystemVersion();
 const buildNumber = DeviceInfo.getBuildNumber();
