@@ -85,7 +85,7 @@ export class CategoryScreen extends React.Component {
     this.props.fetchBlogsCat(filter);
   };
   _loadMore = () => {
-
+      console.warn(this.props.blogCount);
     if (this.props.blogCount <= this.props.blogs.length) {
       this.setState({hasMore: false});
       return;

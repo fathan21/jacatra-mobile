@@ -146,7 +146,7 @@ export class PageScreen extends React.Component {
         this._toast('shared with an activityType: ' + result.activityType);
       } else {
         this.setState({result: 'shared'});
-        this._toast('shared');
+        //this._toast('shared');
       }
     } else if (result.action === Share.dismissedAction) {
       this.setState({result: 'dismissed'});

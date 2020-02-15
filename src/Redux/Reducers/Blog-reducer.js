@@ -143,6 +143,7 @@ export default (state=defaultState, action={}) => {
           blogMainByCat[action.payload.cat] = action.payload.data.main;
           blogCountByCat[action.payload.cat] = action.payload.data.count;
         } else{        
+          blogCountByCat[action.payload.cat] = action.payload.data.count;
           blogsByCat[action.payload.cat] = blogsByCat[action.payload.cat].concat(action.payload.data.data);
         }
 
