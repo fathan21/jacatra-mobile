@@ -9,18 +9,18 @@ import {
   Linking,
   StyleSheet
 } from "react-native";
-import {Layout} from 'react-native-ui-kitten';
-import HTML from 'react-native-render-html';
-import {toDate, _storeLocalData, _getLocalData} from '../Redux/helper';
-import AutoHeightImage from 'react-native-auto-height-image';
-import ImageView from 'react-native-image-view';
-import SwiperFlatList from 'react-native-swiper-flatlist';
-import {WebView} from "react-native-webview";
+import { Layout } from "react-native-ui-kitten";
+import HTML from "react-native-render-html";
+import { toDate, _storeLocalData, _getLocalData } from "../Redux/helper";
+import AutoHeightImage from "react-native-auto-height-image";
+import ImageView from "react-native-image-view";
+import SwiperFlatList from "react-native-swiper-flatlist";
+import { WebView } from "react-native-webview";
 
-import {RenderKeywordBlog, RenderRelatedBlog} from '../Component/';
+import { RenderKeywordBlog, RenderRelatedBlog } from "../Component/";
 
-const heightWindow = Dimensions.get('window').height;
-const widthWindow = Dimensions.get('window').width;
+const heightWindow = Dimensions.get("window").height;
+const widthWindow = Dimensions.get("window").width;
 export class BlogDetailContainer extends React.Component {
   state = {
     isImageViewVisible: false,
@@ -31,28 +31,31 @@ export class BlogDetailContainer extends React.Component {
     subContentFontsize: 13,
     fontSizeMenu: [
       {
-        title: 'Kecil',
+        title: "Kecil",
         fontSize: {
           title: 18,
           cont: 14,
           sub: 11
         }
-      }, {
-        title: 'Sedang',
+      },
+      {
+        title: "Sedang",
         fontSize: {
           title: 20,
           cont: 16,
           sub: 13
         }
-      }, {
-        title: 'Besar',
+      },
+      {
+        title: "Besar",
         fontSize: {
           title: 22,
           cont: 20,
           sub: 15
         }
-      }, {
-        title: 'Sangat Besar',
+      },
+      {
+        title: "Sangat Besar",
         fontSize: {
           title: 25,
           cont: 20,
@@ -65,40 +68,46 @@ export class BlogDetailContainer extends React.Component {
     super(props);
   }
 
-  ComponentDidMount() {};
+  ComponentDidMount() {}
 
   componentWillMount() {
-    _getLocalData('_fontSizeType').then((e) => {
+    _getLocalData("_fontSizeType").then(e => {
       if (e !== null) {
         let fontSizeType = parseFloat(e);
         let d = this.state.fontSizeMenu.filter((val, idx) => {
-          return idx == fontSizeType
+          return idx == fontSizeType;
         });
 
         if (d.length > 0) {
-          this.setState({
-            titelFontSize: d[0].fontSize.title,
-            contentFontSize: d[0].fontSize.cont,
-            subContentFontsize: d[0].fontSize.sub
-          }, () => {});
+          this.setState(
+            {
+              titelFontSize: d[0].fontSize.title,
+              contentFontSize: d[0].fontSize.cont,
+              subContentFontsize: d[0].fontSize.sub
+            },
+            () => {}
+          );
         }
       }
-    })
+    });
   }
   componentWillUnmount() {}
   componentWillReceiveProps(prevProps) {
     if (prevProps.fontSizeType !== undefined) {
       let d = this.state.fontSizeMenu.filter((val, idx) => {
-        return idx == prevProps.fontSizeType
+        return idx == prevProps.fontSizeType;
       });
       if (d.length > 0) {
-        _storeLocalData('_fontSizeType', prevProps.fontSizeType).then((e) => {
-          this.setState({
-            titelFontSize: d[0].fontSize.title,
-            contentFontSize: d[0].fontSize.cont,
-            subContentFontsize: d[0].fontSize.sub
-          }, () => {});
-        })
+        _storeLocalData("_fontSizeType", prevProps.fontSizeType).then(e => {
+          this.setState(
+            {
+              titelFontSize: d[0].fontSize.title,
+              contentFontSize: d[0].fontSize.cont,
+              subContentFontsize: d[0].fontSize.sub
+            },
+            () => {}
+          );
+        });
       }
     }
   }
@@ -107,67 +116,101 @@ export class BlogDetailContainer extends React.Component {
   };
 
   _renderImage = (data, i = 0) => {
-    return (<View key={i}>
-      <TouchableOpacity key={data.title} onPress={() => {
-          this.setState({imageIndex: i, isImageViewVisible: true});
-        }}>
-        <View style={{
-            minHeight: Dimensions.get('window').width / 2,
-            backgroundColor: '#e1e4e8'
-          }}>
-          <AutoHeightImage width={Dimensions.get('window').width} source={{
-              uri: data.img
-            }}/>
-        </View>
-      </TouchableOpacity>
+    return (
+      <View key={i}>
+        <TouchableOpacity
+          key={data.title}
+          onPress={() => {
+            this.setState({ imageIndex: i, isImageViewVisible: true });
+          }}
+        >
+          <View
+            style={{
+              minHeight: Dimensions.get("window").width / 2,
+              backgroundColor: "#e1e4e8"
+            }}
+          >
+            <AutoHeightImage
+              width={Dimensions.get("window").width}
+              source={{
+                uri: data.img
+              }}
+            />
+          </View>
+        </TouchableOpacity>
 
-      <Text style={{
-          marginHorizontal: 10,
-          color: '#767676',
-          fontSize: this.state.subContentFontsize
-        }}>
-        {data.photographer}
-      </Text>
-    </View>);
-  }
-  _renderImages = (data) => {
-    return (<View key={0} style={{
-        borderBottomWidth: 0,
-        paddingBottom: 0
-      }}>
-      <SwiperFlatList autoplayDelay={5} autoplayLoop="autoplayLoop" index={data.imgs.length - 1} showPagination="showPagination" paginationDefaultColor={"#D6D6D6"} paginationActiveColor={"#5c171a"} paginationStyle={{
-          height: 25
-        }} paginationStyleItem={{
-          width: 20,
-          height: 20,
-          margin: 0,
-          padding: 0
-        }}>
-        {
-          data.imgs.map((img, i) => {
+        <Text
+          style={{
+            marginHorizontal: 10,
+            color: "#767676",
+            fontSize: this.state.subContentFontsize
+          }}
+        >
+          {data.photographer}
+        </Text>
+      </View>
+    );
+  };
+  _renderImages = data => {
+    return (
+      <View
+        key={0}
+        style={{
+          borderBottomWidth: 0,
+          paddingBottom: 0
+        }}
+      >
+        <SwiperFlatList
+          autoplayDelay={5}
+          autoplayLoop={true}
+          index={data.imgs.length - 1}
+          showPagination={true}
+          paginationDefaultColor={"#D6D6D6"}
+          paginationActiveColor={"#5c171a"}
+          paginationStyle={{
+            height: 25
+          }}
+          paginationStyleItem={{
+            width: 20,
+            height: 20,
+            margin: 0,
+            padding: 0
+          }}
+        >
+          {data.imgs.map((img, i) => {
             // img.photographer = img.name;
-            return (this._renderImage(img, i));
-          })
-        }
-      </SwiperFlatList>
-    </View>);
-  }
-  _renderVideo = (data) => {
-    return (<View style={{
-        width: widthWindow,
-        height: (widthWindow / 2),
-        backgroundColor: '#cccccc',
-        marginBottom: 20
-      }} key={0}>
-      <WebView style={{
-          margin: 0
-        }} source={{
-          uri: data.video
-        }} javaScriptEnabled={true} domStorageEnabled={true}/>
-    </View>)
-  }
+            return this._renderImage(img, i);
+          })}
+        </SwiperFlatList>
+      </View>
+    );
+  };
+  _renderVideo = data => {
+    return (
+      <View
+        style={{
+          width: widthWindow,
+          height: widthWindow / 2,
+          backgroundColor: "#cccccc",
+          marginBottom: 20
+        }}
+        key={0}
+      >
+        <WebView
+          style={{
+            margin: 0
+          }}
+          source={{
+            uri: data.video
+          }}
+          javaScriptEnabled={true}
+          domStorageEnabled={true}
+        />
+      </View>
+    );
+  };
   render() {
-    const IMAGES_MAX_WIDTH = Dimensions.get('window').width;
+    const IMAGES_MAX_WIDTH = Dimensions.get("window").width;
     const CUSTOM_STYLES = {};
     const CUSTOM_RENDERERS = {};
     const DEFAULT_PROPS = {
@@ -190,16 +233,16 @@ export class BlogDetailContainer extends React.Component {
       goToPage,
       theme
     } = this.props;
-    let {titelFontSize, contentFontSize, subContentFontsize} = this.state;
+    let { titelFontSize, contentFontSize, subContentFontsize } = this.state;
 
-    let content = '';
+    let content = "";
     let media = [];
     if (data.content) {
-      content = this._replaceAll(data.content, "<p><br></p>", '');
+      content = this._replaceAll(data.content, "<p><br></p>", "");
     }
 
     let images = [];
-    if (data.type == 'article') {
+    if (data.type == "article") {
       media.push(this._renderImage(data, 0));
       images = [
         {
@@ -212,7 +255,7 @@ export class BlogDetailContainer extends React.Component {
         }
       ];
     }
-    if (data.type == 'galery') {
+    if (data.type == "galery") {
       media.push(this._renderImages(data));
       data.imgs.forEach(element => {
         images.push({
@@ -222,134 +265,156 @@ export class BlogDetailContainer extends React.Component {
           title: element.name,
           width: IMAGES_MAX_WIDTH,
           height: IMAGES_MAX_WIDTH / 2
-        })
+        });
       });
     }
-    if (data.type == 'video') {
+    if (data.type == "video") {
       media.push(this._renderVideo(data));
     }
-    return (<Layout style={{
-        paddingBottom: 10,
-        backgroundColor: this.props.theme.CARD_TEXT_BG,
-        minHeight: heightWindow,
-        marginBottom: 100
-      }}>
-      <ScrollView refreshControl={<RefreshControl
-        refreshing = {
-          isRefreshing
-        }
-        onRefresh = {
-          onRefresh
-        }
-        tintColor = "#000000"
-        title = "Loading..."
-        titleColor = "#000000"
-        colors = {
-          ['#000000', '#000000', '#000000']
-        }
-        progressBackgroundColor = "#ffffff"
-        />}>
-        <ScrollView style={{
-            flex: 1,
-            marginHorizontal: 0,
-            marginTop: 0,
-            paddingBottom: 10
-          }}>
-          <View style={{
-              marginVertical: 10,
-              marginHorizontal: 10
-            }}>
-            <Text style={[{
-                fontSize: titelFontSize,
-                fontWeight: 'bold',
-                marginBottom: 10,
-                color: this.props.theme.CARD_TEXT_COLOR,
-                letterSpacing: 1.5,
-                textAlign: 'justify',
-              }, styles.title]}>
-              {data.title}
-            </Text>
-            <TouchableOpacity onPress={(e) => {
-                navigation.push('Search', {
-                  val: data.writer,
-                  type: 'writer'
-                })
-              }
-}>
-              <Text style={{
-                  fontSize: subContentFontsize,
-                  color: '#767676',
-                  textTransform: 'capitalize',
-                  fontFamily:'robotoregular',
-                }}>
-                {data.writer}
-                {'\n'}
-                jacatra.net - {toDate(data.date)}
-              </Text>
-            </TouchableOpacity>
-          </View>
-          {
-            data.title
-              ? media
-              : null
+    return (
+      <Layout
+        style={{
+          backgroundColor: this.props.theme.CARD_TEXT_BG,
+          paddingTop: 10
+        }}
+      >
+        <ScrollView
+          refreshControl={
+            <RefreshControl
+              refreshing={isRefreshing}
+              onRefresh={onRefresh}
+              tintColor="#000000"
+              title="Loading..."
+              titleColor="#000000"
+              colors={["#000000", "#000000", "#000000"]}
+              progressBackgroundColor="#ffffff"
+            />
           }
-          <ScrollView style={{
-              marginHorizontal: 10,
-              marginTop: 10,
-              flex:1
-            }}>
-            {
-              content
-                ? <HTML html={content} {...DEFAULT_PROPS} tagsStyles={{
-                      p: {
-                        padding: 0,
-                        margin: 2,
-                        marginBottom: 10,
-                        color: 'black',
-                        letterSpacing: 1,
-                        fontFamily:'robotoregular',
-                        textAlign: 'justify',
-                        color: this.props.theme.CARD_TEXT_COLOR,
-                        fontSize: contentFontSize
-                      }
-                    }}/>
-                : null
-            }
-          </ScrollView>
-        </ScrollView>
-        {
-          data.tags
-            ? <RenderKeywordBlog items={(data.tags).split(',')} navigation={navigation} theme={theme}/>
-            : null
-        }
-        {
-          realted.length > 0
-            ? <RenderRelatedBlog items={realted} goToPage={goToPage} theme={theme}/>
-            : null
-        }
+        >
+          <View
+            style={{
+              flex: 1,
+              marginHorizontal: 0,
+              marginTop: 0
+            }}
+          >
+            <View
+              style={{
+                marginHorizontal: 10
+              }}
+            >
+              <Text
+                style={[
+                  {
+                    fontSize: titelFontSize,
+                    fontWeight: "bold",
+                    marginBottom: 10,
+                    color: this.props.theme.CARD_TEXT_COLOR,
+                    letterSpacing: 1.5,
+                    textAlign: "justify"
+                  },
+                  styles.title
+                ]}
+              >
+                {data.title}
+              </Text>
+              <TouchableOpacity
+                onPress={e => {
+                  navigation.push("Search", {
+                    val: data.writer,
+                    type: "writer"
+                  });
+                }}
+              >
+                <Text
+                  style={{
+                    fontSize: subContentFontsize,
+                    color: "#767676",
+                    textTransform: "capitalize",
+                    fontFamily: "robotoregular"
+                  }}
+                >
+                  {data.writer}
+                  {"\n"}
+                  jacatra.net {data.date ? `-` : ``} {toDate(data.date)}
+                </Text>
+              </TouchableOpacity>
+            </View>
+            {data.title ? media : null}
+            <View
+              style={{
+                marginHorizontal: 10,
+                marginTop: 10,
+                flex: 1
+              }}
+            >
+              {content ? (
+                <HTML
+                  html={content}
+                  {...DEFAULT_PROPS}
+                  tagsStyles={{
+                    p: {
+                      padding: 0,
+                      margin: 2,
+                      marginBottom: 10,
+                      color: "black",
+                      letterSpacing: 1,
+                      fontFamily: "robotoregular",
+                      textAlign: "justify",
+                      color: this.props.theme.CARD_TEXT_COLOR,
+                      fontSize: contentFontSize
+                    }
+                  }}
+                />
+              ) : null}
+            </View>
+          </View>
+          {data.tags ? (
+            <RenderKeywordBlog
+              items={data.tags.split(",")}
+              navigation={navigation}
+              theme={theme}
+            />
+          ) : null}
+          {realted.length > 0 ? (
+            <RenderRelatedBlog
+              items={realted}
+              goToPage={goToPage}
+              theme={theme}
+            />
+          ) : null}
 
-      {
-        data.title
-          ? <ImageView glideAlways="glideAlways" images={images} imageIndex={this.state.imageIndex} animationType="fade" isVisible={this.state.isImageViewVisible} renderFooter={(currentImage) => (<View style={{
-                  width: 100,
-                  height: 100
-                }}>
-                <Text>My footer</Text>
-              </View>)} onClose={() => this.setState({isImageViewVisible: false})} onImageChange={index => {
+          {data.title ? (
+            <ImageView
+              glideAlways="glideAlways"
+              images={images}
+              imageIndex={this.state.imageIndex}
+              animationType="fade"
+              isVisible={this.state.isImageViewVisible}
+              renderFooter={currentImage => (
+                <View
+                  style={{
+                    width: 100,
+                    height: 100
+                  }}
+                >
+                  <Text>My footer</Text>
+                </View>
+              )}
+              onClose={() => this.setState({ isImageViewVisible: false })}
+              onImageChange={index => {
                 console.log(index);
-              }}/>
-          : null
-      }
-      <View style={{height:200}}>
-
-      </View>
-      </ScrollView>
-    </Layout>);
+              }}
+            />
+          ) : null}
+        </ScrollView>
+      </Layout>
+    );
   }
 }
 
 const styles = StyleSheet.create({
-  title:{
-    fontFamily:'robotoregular'
+  title: {
+    fontFamily: "robotoregular"
   }
 });

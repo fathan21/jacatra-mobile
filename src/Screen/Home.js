@@ -1,10 +1,11 @@
 import * as React from "react";
 
 import { connect } from "react-redux";
-import { View, Dimensions, Animated } from "react-native";
-import { TabView, Tab, Layout } from "react-native-ui-kitten";
+import { View, ScrollView, ActivityIndicator, RefreshControl, Animated } from "react-native";
+import { TabView, Tab, Layout, Button } from "react-native-ui-kitten";
 import Toast from "react-native-easy-toast";
 
+import { ArrowPointToTopWhite } from "@src/assets/icons/";
 import { Header, RenderErrorBlog } from "../Component/";
 import { BlogListContainer } from "../Container";
 
@@ -22,6 +23,7 @@ export class HomeScreen extends React.Component {
     loading: false,
     isRefreshing: true,
     hasMore: true,
+    showBtnToTop: false,
     filter: {
       cat: "",
       page: 1,
@@ -33,6 +35,7 @@ export class HomeScreen extends React.Component {
     scrollY: new Animated.Value(0)
   };
   toast = null;
+  scroll = null;
   constructor(props) {
     super(props);
 
@@ -65,11 +68,10 @@ export class HomeScreen extends React.Component {
   };
 
   _onRefresh2 = () => {
-    this.props.fetchHeadline();
+    
   };
 
   _onRefresh3 = () => {
-    this.props.fetchPopuler();
   };
   _toast = msg => {
     this.toast.show(msg, 3000, () => {
@@ -141,6 +143,15 @@ export class HomeScreen extends React.Component {
       <Header navigation={this.props.navigation} title={"Home"} theme={theme} />
     );
   }
+  
+  _goToTop = () => {
+    this.scroll.scrollTo({ x: 0, y: 0, animated: true });
+  };
+  _isCloseToBottom({ layoutMeasurement, contentOffset, contentSize }) {
+    return (
+      layoutMeasurement.height + contentOffset.y >= contentSize.height - 50
+    );
+  }
   render() {
     const { theme } = this.props;
     if (this.props.blogError.global) {
@@ -165,95 +176,165 @@ export class HomeScreen extends React.Component {
     return (
       <Layout
         style={{
-          paddingBottom: 40,
+          flex:1,
           position: "relative",
           backgroundColor: theme.CARD_TEXT_BG
         }}
       >
-        {this.renderListHeader()}
-        <TabView
-          style={{
-            margin: 0,
-            padding: 0
+        
+        <ScrollView stickyHeaderIndices={[0]} 
+        
+          showsVerticalScrollIndicator={false} 
+          ref={c => {
+            this.scroll = c;
           }}
-          tabBarStyle={{
-            backgroundColor: theme.PRIMARY_HEADER_BG,
-            color: theme.PRIMARY_TEXT_COLOR,
-            paddingBottom: 5
+          onScroll={({ nativeEvent }) => {
+            if (nativeEvent.contentOffset.y > 200) {
+              if (!this.state.showBtnToTop) {
+                this.setState({ showBtnToTop: true });
+              }
+            } else {
+              if (this.state.showBtnToTop) {
+                this.setState({ showBtnToTop: false });
+              }
+            }
+            if (this._isCloseToBottom(nativeEvent) && this.state.hasMore) {
+              if (this.state.selectedIndexTab == 0){              
+                this._loadMore()
+              }
+
+            }
           }}
-          indicatorStyle={{
-            backgroundColor: theme.PRIMARY_TEXT_COLOR,
-            marginTop: -5
-          }}
-          selectedIndex={this.state.selectedIndexTab}
-          shouldLoadComponent={this._shouldLoadTabContent}
-          onSelect={this._onSelect}
-        >
-          <Tab
-            title="Terbaru"
-            titleStyle={{
-              color: "#cccccc"
-            }}
-          >
-            <BlogListContainer
-              hasMore={this.state.hasMore}
-              isRefreshing={this.state.isRefreshing}
-              hideHeader={this._hideHeaderAct}
-              loadMore={this._loadMore}
+          refreshControl={
+            <RefreshControl
+              refreshing={this.state.isRefreshing}
               onRefresh={this._onRefresh}
-              goToPage={this._goToPage}
-              blogLoading={this.props.blogLoading}
-              blogError={this.props.blogError}
-              blogs={this.props.blogs}
-              blogMain={this.props.blogMain}
-              theme={this.props.theme}
+              tintColor="#000000"
+              title="Loading..."
+              titleColor="#000000"
+              colors={["#000000", "#000000", "#000000"]}
+              progressBackgroundColor="#ffffff"
+              progressViewOffset={80}
             />
-          </Tab>
-
-          <Tab
-            title="Headline"
-            titleStyle={{
-              color: "#CCCCCC"
+          }
+        >
+          {this.renderListHeader()}
+          <TabView
+            style={{
+              margin: 0,
+              padding: 0
             }}
-          >
-            <BlogListContainer
-              hasMore={false}
-              isRefreshing={false}
-              loadMore={() => {}}
-              onRefresh={this._onRefresh2}
-              goToPage={this._goToPage}
-              hideHeader={this._hideHeaderAct}
-              type_card={"3"}
-              blogLoading={this.props.headlineLoading}
-              blogError={this.props.headlineError}
-              blogs={this.props.headline}
-              blogMain={{}}
-              theme={this.props.theme}
-            />
-          </Tab>
-          <Tab
-            title="Terpopuler"
-            titleStyle={{
-              color: "#CCCCCC"
+            tabBarStyle={{
+              backgroundColor: theme.PRIMARY_HEADER_BG,
+              color: theme.PRIMARY_TEXT_COLOR,
+              paddingBottom: 5
             }}
+            indicatorStyle={{
+              backgroundColor: theme.PRIMARY_TEXT_COLOR,
+              marginTop: -5
+            }}
+            selectedIndex={this.state.selectedIndexTab}
+            shouldLoadComponent={this._shouldLoadTabContent}
+            onSelect={this._onSelect}
           >
-            <BlogListContainer
-              hasMore={false}
-              isRefreshing={false}
-              loadMore={() => {}}
-              onRefresh={this._onRefresh3}
-              goToPage={this._goToPage}
-              hideHeader={this._hideHeaderAct}
-              type_card={"1"}
-              blogLoading={this.props.populerLoading}
-              blogError={this.props.populerError}
-              blogs={this.props.populer}
-              blogMain={{}}
-              theme={this.props.theme}
-            />
-          </Tab>
-        </TabView>
+            <Tab
+              title="Terbaru"
+              titleStyle={{
+                color: "#cccccc"
+              }}
+              style={{flex:1}}
+            >
+              
+              <BlogListContainer
+                hasMore={this.state.hasMore}
+                isRefreshing={this.state.isRefreshing}
+                hideHeader={this._hideHeaderAct}
+                loadMore={this._loadMore}
+                onRefresh={this._onRefresh}
+                goToPage={this._goToPage}
+                blogLoading={this.props.blogLoading}
+                blogError={this.props.blogError}
+                blogs={this.props.blogs}
+                blogMain={this.props.blogMain}
+                theme={this.props.theme}
+              />
+              
+            </Tab>
 
+            <Tab
+              title="Headline"
+              titleStyle={{
+                color: "#CCCCCC"
+              }}
+              style={{flex:1}}
+            >
+              <BlogListContainer
+                hasMore={false}
+                isRefreshing={false}
+                loadMore={() => {}}
+                onRefresh={this._onRefresh2}
+                goToPage={this._goToPage}
+                hideHeader={this._hideHeaderAct}
+                type_card={"3"}
+                blogLoading={this.props.headlineLoading}
+                blogError={this.props.headlineError}
+                blogs={this.props.headline}
+                blogMain={{}}
+                theme={this.props.theme}
+              />
+            </Tab>
+            <Tab
+              title="Terpopuler"
+              titleStyle={{
+                color: "#CCCCCC"
+              }}
+              style={{flex:1}}
+            >
+              <BlogListContainer
+                hasMore={false}
+                isRefreshing={false}
+                loadMore={() => {}}
+                onRefresh={this._onRefresh3}
+                goToPage={this._goToPage}
+                hideHeader={this._hideHeaderAct}
+                type_card={"1"}
+                blogLoading={this.props.populerLoading}
+                blogError={this.props.populerError}
+                blogs={this.props.populer}
+                blogMain={{}}
+                theme={this.props.theme}
+              />
+            </Tab>
+          </TabView>
+          
+          {
+                this.props.blogLoading ?          
+                <View contentContainerStyle={{flex:"1"}}>
+                  <ActivityIndicator size="large" />
+                </View>: null
+          }
+        </ScrollView>
+        
+        {this.state.showBtnToTop ? (
+          <Button
+            style={{
+              position: "absolute",
+              right: 20,
+              bottom: 200,
+              width: 40,
+              height: 40,
+              backgroundColor: theme.PRIMARY_HEADER_BG,
+              color: theme.PRIMARY_TEXT_COLOR,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              borderWidth: 0
+            }}
+            size="small"
+            icon={ArrowPointToTopWhite}
+            onPress={this._goToTop}
+          />
+        ) : null}
         <Toast
           opacity={0.5}
           ref={ref => {

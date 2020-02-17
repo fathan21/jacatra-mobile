@@ -27,7 +27,7 @@ class App extends React.Component {
   }
 
   setTheme = (theme) => {
-    console.warn(theme);
+    // console.warn(theme);
   }
 
   render() {
