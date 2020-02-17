@@ -1,9 +1,7 @@
 
-//const base_url = 'http://192.168.43.118:8000/';
-const base_url = 'https://jacatra.net/';
+import { APP_KEY, APP_END_POINT, APP_URL } from 'react-native-dotenv';
 export const App = {
-	//api:'https://jacatra.net/api/v1/',
-	base_url: base_url,
-	api: base_url + 'api/v1/',
-	csrf:'8dhpHK3EE7yyPTRFaHS6zaErPkCQJjnKkk76yo9w'
+	base_url: APP_URL,
+	api: APP_END_POINT,
+	csrf:APP_KEY
 };
