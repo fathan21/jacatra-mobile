@@ -4,7 +4,6 @@ const url = 'news';
 
 export function fetchBlogs(filter={cat:'',page:1,limit:20,q:''}){
   let params = {filter:filter};
-  //console.warn(params);
   if(filter.page==1){
     
     return dispatch => {
