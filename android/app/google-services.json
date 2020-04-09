@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "459130421940",
+    "firebase_url": "https://jacatranet-d1e7f.firebaseio.com",
+    "project_id": "jacatranet-d1e7f",
+    "storage_bucket": "jacatranet-d1e7f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:459130421940:android:06697f7a79c404ce17cde1",
+        "android_client_info": {
+          "package_name": "com.h3.jacatranet"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "459130421940-ufrjhv12aq61kfn8iqe4u4j4jl8h9k2a.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBei-RkhLCVAlDZHVBgl_m7_kTIlPaiKYk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "459130421940-ufrjhv12aq61kfn8iqe4u4j4jl8h9k2a.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
